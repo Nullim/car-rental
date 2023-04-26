@@ -6,50 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Car Rental Management</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <script src="https://kit.fontawesome.com/775bbf9e57.js" crossorigin="anonymous"></script>
 </head>
-<body class="has-text-centered grid-container">
-  <nav class="navbar is-info" role="navigation" aria-label="main-navigation">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="/">
-        <img src="/public/img/logo.png" alt="Rental logo">
-      </a>
+<body>
+  {% include ".navbar.njk" %}
 
-      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
-    </div>
-
-    <div id="navbarBasicExample" class="navbar-menu">
-      <div class="navbar-start">
-        <a class="navbar-item" href="/">Home</a>
-        <a class="navbar-item" href="/user/view">Users</a>
-        <a class="navbar-item" href="/car/view">Cars</a>
-        <a class="navbar-item" href="/reservation/view">Manage Reservations</a>
-      </div>
-      <div class="navbar-end">
-        <a class="navbar-item" href="https://github.com/Nullim/car-rental/issues/new">
-          Report an issue
-        </a>
-      </div>
-    </div>
-  </nav>
-  <section class="hero">
-    <div class="hero-body">
-      <p class="title">
-        List of cars
-      </p>
-      <p class="subtitle">
-        Choose the car you would like to manage
-      </p>
-      <div class="columns is-multiline is-variable is-2-mobile is-0-tablet is-4-desktop is-8-widescreen is-1-fullhd">
-        {% block menu %}
-        
-        {% endblock %}
-      </div>
-    </div>
-  </section>
+  {% block body %}{% endblock %}
   <footer class="footer">
     <div class="content has-text-centered">
       <p>

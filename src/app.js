@@ -1,16 +1,15 @@
 require('dotenv').config()
 const express = require('express');
 const nunjucks = require('nunjucks');
+const bodyParser = require('body-parser');
 
 const configureDependencyInjection = require('.config/di');
 const { init: initCarModule } = require('./module/car/module');
-const { init: initUserModule } = require('./module/user/module')
-const { init: initReservationModule } = require('./module/reservation/module');
 
 const app = express();
 const port = 3000;
 
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/public', express.static('public'));
 
 nunjucks.configure('src/module', { 
@@ -21,8 +20,6 @@ nunjucks.configure('src/module', {
 const container = configureDependencyInjection(app);
 
 initCarModule(app, container);
-initUserModule(app, container);
-initReservationModule(app, container);
 
 /**
  * @type {import('./module/car/controller/carController')} carController;

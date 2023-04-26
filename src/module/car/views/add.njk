@@ -1,0 +1,142 @@
+{% extends "views/layouts/base.njk" %}
+
+{% block body %}
+<form class="container mt-4" method="post" action="/car/save">
+    <div class="field">
+      <label class="label">Brand</label>
+      <div class="control">
+        <div class="select">
+          <select name="brand">
+            <option>Select brand</option>
+            <option>Fiat</option>
+            <option>Ford</option>
+            <option>Chevrolet</option>
+            <option>Tesla</option>
+            <option>Honda</option>
+            <option>Peugeot</option>
+            <option>BMW</option>
+            <option>Volkswagen</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Model</label>
+      <div class="control has-icons-left">
+        <input class="input" type="text" name="model" placeholder="Insert Car Model">
+        <span class="icon is-small is-left">
+          <i class="fa-solid fa-car"></i>
+        </span>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Year</label>
+      <div class="control has-icons-left">
+        <input class="input" type="number" name="year" placeholder="i.e: 1977, 2008, 2010" min="1900">
+        <span class="icon is-small is-left">
+          <i class="fa-solid fa-calendar-days"></i>
+        </span>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Kilometers</label>
+      <div class="control has-icons-left">
+        <input class="input" type="number" name="kms" min="0">
+        <span class="icon is-small is-left">
+          <i class="fa-solid fa-road"></i>
+        </span>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Color</label>
+      <div class="control has-icons-left">
+        <div class="select">
+          <select name="color">
+            <option>Select a color</option>
+            <option>Red</option>
+            <option>Blue</option>
+            <option>Yellow</option>
+            <option>Green</option>
+            <option>Black</option>
+            <option>White</option>
+            <option>Pink</option>
+            <option>Orange</option>
+            <option>Grey</option>
+          </select>
+          <div class="icon is-left">
+            <i class="fa-sharp fa-solid fa-palette"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">AC</label>
+      <div class="control has-icons-left">
+        <div class="select">
+          <select name="ac">
+            <option>Choose an option</option>
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+          <div class="icon is-left">
+            <i class="fa-solid fa-fan"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Transmission</label>
+      <div class="control has-icons-left">
+        <div class="select">
+          <select name="transmission">
+            <option>Choose an option</option>
+            <option>Automatic</option>
+            <option>Manual</option>
+            <option>CVT</option>
+          </select>
+          <div class="icon is-left">
+            <i class="fa-solid fa-gears"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Passengers</label>
+      <div class="control has-icons-left">
+        <div class="select">
+          <select name="passengers">
+            <option>Choose an option</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+          </select>
+          <div class="icon is-left">
+            <i class="fa-solid fa-person"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Price</label>
+      <div class="control has-icons-left">
+        <input class="input" type="number" name="price" min="0">
+        <span class="icon is-left">
+          <i class="fa-solid fa-dollar-sign"></i>
+        </span>
+      </div>
+    </div>
+    <div class="field is-grouped">
+      <div class="control">
+        <button class="button is-link" type="submit">Submit</button>
+      </div>
+      <div class="control">
+        <button class="button is-link is-danger">Cancel</button>
+      </div>
+    </div>
+  </form>
+{% endblock %}
