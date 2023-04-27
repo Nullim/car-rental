@@ -1,0 +1,63 @@
+{% extends "view/layout/home.njk" %}
+{% block body %}
+<section class="hero">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">{{ car.brand }} {{ car.model }} {{ car.year }}</h1><br>
+        <div class="columns is-mobile is-centered is-vcentered">
+          <div class="column">
+            <figure class="image is-5by4">
+              <img src="" alt="Car Image">
+            </figure>
+          </div>
+          <div class="column">
+              <span class="title">Price: {{ car.price }}$</span><br>
+              <br>
+              <table class="content is-large">
+                <thead>
+                  <tr>
+                    <th>Specifications</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Kilometers:</td>
+                    <td>{{ car.kms }}</td>
+                  </tr>
+                  <tr>
+                    <td>Color:</td>
+                    <td>{{ car.color }}</td>
+                  </tr>
+                  <tr>
+                    <td>Air Conditioning:</td>
+                    <td>{{ car.ac }}</td>
+                  </tr>
+                  <tr>
+                    <td>Passengers:</td>
+                    <td>{{ car.passengers }}</td>
+                  </tr>
+                  <tr>
+                    <td>Transmission:</td>
+                    <td>{{ car.transmission }}</td>
+                  </tr>
+                  <tr>
+                    <td>Created:</td>
+                    <td>{{ car.createdAt }}</td>
+                  </tr>
+                  <tr>
+                    <td>Updated:</td>
+                    <td>{{ car.updatedAt }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="buttons">
+                <a class="button is-link" href={{ "/car/edit" + car.id }}>Edit</a>
+                <a class="button is-danger" href={{ "/car/delete" + car.id }}>Delete</a>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

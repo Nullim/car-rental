@@ -13,8 +13,8 @@ module.exports = class CarController {
   configureRoutes(app) {
     const ROUTE = this.ROUTE_BASE;
     app.get(`${ROUTE}`, this.index.bind(this));
-    app.get(`${ROUTE}/manage`, this.manage.bind(this));
     app.get(`${ROUTE}/view/:carId`, this.view.bind(this));
+    app.get(`${ROUTE}/edit/:carID`, this.edit.bind(this));
     app.get(`${ROUTE}/add`, this.add.bind(this));
     app.post(`${ROUTE}/save`, this.save.bind(this));
   }
@@ -27,17 +27,18 @@ module.exports = class CarController {
     })
   }
 
-  manage(req, res) {
-    const cars = this.carService.getAll();
-    res.render(`${this.CAR_VIEWS}/manage.njk`, {
-      cars
-    });
-  }
-
   view(req, res) {
     const { carId } = req.params;
     const car = this.carsService.getById(carId);
     res.render(`${this.CAR_VIEWS}/view.njk`, {
+      car
+    });
+  }
+
+  edit(req, res) {
+    const { carId } = req.params;
+    const car = this.carService.getById(carId);
+    res.render(`${this.CAR_VIEWS}/edit.njk`, {
       car
     });
   }

@@ -1,0 +1,160 @@
+<form class="container mt-4" method="post" action="/car/save">
+    {% if car %}
+      <input type="hidden" name="id" value="{{car.id}}">
+    {% endif %}
+    <div class="field">
+      <label class="label">Brand</label>
+      <div class="control">
+        <div class="select">
+          <select name="brand">
+            <option disabled>Select brand</option>
+            <option value="Fiat" {{ 'selected' if car.brand === 'Fiat' }}>Fiat</option>
+            <option value="Ford" {{ 'selected' if car.brand === 'Ford' }}>Ford</option>
+            <option value="Chevrolet" {{ 'selected' if car.brand === 'Chevrolet' }}>Chevrolet</option>
+            <option value="Tesla" {{ 'selected' if car.brand === 'Tesla' }}>Tesla</option>
+            <option value="Honda" {{ 'selected' if car.brand === 'Honda' }}>Honda</option>
+            <option value="Peugeot" {{ 'selected' if car.brand === 'Peugeot' }}>Peugeot</option>
+            <option value="BMW" {{ 'selected' if car.brand === 'BMW' }}>BMW</option>
+            <option value="Volkswagen" {{ 'selected' if car.brand === 'Volkswagen' }}>Volkswagen</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Model</label>
+      <div class="control has-icons-left">
+        <input required class="input" type="text" name="model" placeholder="Insert Car Model"
+        {% if car %}
+          value={{ car.model }}
+        {% endif %}
+        >
+        <span class="icon is-small is-left">
+          <i class="fa-solid fa-car"></i>
+        </span>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Year</label>
+      <div class="control has-icons-left">
+        <input required class="input" type="number" name="year" placeholder="i.e: 1977, 2008, 2010" min="1900"
+        {% if car %}
+          value={{ car.year }}
+        {% endif %}
+        >
+        <span class="icon is-small is-left">
+          <i class="fa-solid fa-calendar-days"></i>
+        </span>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Kilometers</label>
+      <div class="control has-icons-left">
+        <input required class="input" type="number" name="kms" min="0"
+        {% if car %}
+          value={{ car.kms }}
+        {% endif %}
+        >
+        <span class="icon is-small is-left">
+          <i class="fa-solid fa-road"></i>
+        </span>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Color</label>
+      <div class="control has-icons-left">
+        <div class="select">
+          <select name="color">
+            <option disabled>Select a color</option>
+            <option value="Red" {{ 'selected' if car.color === 'Red' }}>Red</option>
+            <option value="Blue" {{ 'selected' if car.color === 'Blue' }}>Blue</option>
+            <option value="Yellow" {{ 'selected' if car.color === 'Yellow' }}>Yellow</option>
+            <option value="Green" {{ 'selected' if car.color === 'Green' }}>Green</option>
+            <option value="Black" {{ 'selected' if car.color === 'Black' }}>Black</option>
+            <option value="White" {{ 'selected' if car.color === 'White' }}>White</option>
+            <option value="Pink" {{ 'selected' if car.color === 'Pink' }}>Pink</option>
+            <option value="Orange" {{ 'selected' if car.color === 'Orange' }}>Orange</option>
+            <option value="Grey" {{ 'selected' if car.color === 'Grey' }}>Grey</option>
+          </select>
+          <div class="icon is-left">
+            <i class="fa-sharp fa-solid fa-palette"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">AC</label>
+      <div class="control has-icons-left">
+        <div class="select">
+          <select name="ac">
+            <option disabled>Choose an option</option>
+            <option value="Yes" {{ 'selected' if car.ac === "Yes" }}>Yes</option>
+            <option value="No" {{ 'selected' if car.ac === 'No' }}>No</option>
+          </select>
+          <div class="icon is-left">
+            <i class="fa-solid fa-fan"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Transmission</label>
+      <div class="control has-icons-left">
+        <div class="select">
+          <select name="transmission">
+            <option>Choose an option</option>
+            <option value="Automatic" {{ 'selected' if car.transmission === 'Automatic' }}>Automatic</option>
+            <option value="Manual" {{ 'selected' if car.transmission === 'Manual' }}>Manual</option>
+            <option value="CVT" {{ 'selected' if car.transmission === 'CVT' }}>CVT</option>
+          </select>
+          <div class="icon is-left">
+            <i class="fa-solid fa-gears"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Passengers</label>
+      <div class="control has-icons-left">
+        <div class="select">
+          <select name="passengers">
+            <option>Choose an option</option>
+            <option value="1" {{ 'selected' if car.passengers === '1' }}>1</option>
+            <option value="2" {{ 'selected' if car.passengers === '2' }}>2</option>
+            <option value="3" {{ 'selected' if car.passengers === '3' }}>3</option>
+            <option value="4" {{ 'selected' if car.passengers === '4' }}>4</option>
+            <option value="5" {{ 'selected' if car.passengers === '5' }}>5</option>
+            <option value="6" {{ 'selected' if car.passengers === '6' }}>6</option>
+            <option value="7" {{ 'selected' if car.passengers === '7' }}>7</option>
+            <option value="8+" {{ 'selected' if car.passengers === '8+' }}>8+</option>
+          </select>
+          <div class="icon is-left">
+            <i class="fa-solid fa-person"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Price</label>
+      <div class="control has-icons-left">
+        <input required class="input" type="number" name="price" min="0" 
+        {% if car %}
+          value={{ car.price }}
+        {% endif %}
+        >
+        <span class="icon is-left">
+          <i class="fa-solid fa-dollar-sign"></i>
+        </span>
+      </div>
+    </div>
+    {% if car %}
+      <input type="hidden" name="created_at" value="{{ car.createdAt }}">
+    {% endif %}
+    <div class="field is-grouped">
+      <div class="control">
+        <button class="button is-link" type="submit">Submit</button>
+      </div>
+      <div class="control">
+        <button class="button is-link is-danger">Cancel</button>
+      </div>
+    </div>
+  </form>

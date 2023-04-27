@@ -16,9 +16,23 @@ module.exports = class CarRepository {
   save(car) {
     const { id, brand, model, year, kms, color, ac, passengers, transmission, price } = car;
     if (id) {
-      // Modify car
+      const stmt = this.databaseAdapter.prepare(
+        `UPDATE cars
+        SET
+          brand = ?,
+          model = ?,
+          year = ?,
+          kms = ?,
+          color = ?,
+          ac = ?,
+          passengers = ?,
+          transmission = ?,
+          price = ?
+          updated_at = datetime('now', 'localtime')
+        WHERE id = ?`
+      );
+      stmt.run(brand, model, year, kms, color, ac, passengers, transmission, price, id)
     } else {
-      // Create car
       const stmt = this.databaseAdapter.prepare(
         `INSERT INTO cars(
           brand,
