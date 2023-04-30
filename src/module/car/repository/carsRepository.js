@@ -14,7 +14,7 @@ module.exports = class CarRepository {
    */
 
   save(car) {
-    const { id, brand, model, year, kms, color, ac, passengers, transmission, price } = car;
+    const { id, brand, model, year, kms, color, ac, passengers, transmission, price, img } = car;
     if (id) {
       const stmt = this.databaseAdapter.prepare(
         `UPDATE cars
@@ -27,11 +27,13 @@ module.exports = class CarRepository {
           ac = ?,
           passengers = ?,
           transmission = ?,
-          price = ?
+          price = ?,
+          img = ?,
           updated_at = datetime('now', 'localtime')
-        WHERE id = ?`
+      WHERE id = ?`
       );
-      stmt.run(brand, model, year, kms, color, ac, passengers, transmission, price, id)
+      stmt.run(brand, model, year, kms, color, ac, passengers, transmission, price, img, id);
+      return this.getById(id);
     } else {
       const stmt = this.databaseAdapter.prepare(
         `INSERT INTO cars(
@@ -43,12 +45,23 @@ module.exports = class CarRepository {
           ac,
           passengers,
           transmission,
-          price
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+          price,
+          img
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
       );
-      stmt.run(brand, model, year, kms, color, ac, passengers, transmission, price);
+      const latestCar = stmt.run(brand, model, year, kms, color, ac, passengers, transmission, price, img);
+      const { mostRecentCarId } = latestCar;
+      return this.getById(mostRecentCarId)
     }
   }
+
+  delete(car) {
+    const { id } = car;
+    const stmt = this.databaseAdapter.prepare('DELETE FROM cars WHERE id = ?');
+    stmt.run(id);
+    return car;
+  }
+  
   /**
   * @param {number} carId
   */
@@ -65,6 +78,7 @@ module.exports = class CarRepository {
         passengers,
         transmission,
         price,
+        img,
         created_at,
         updated_at
         FROM cars
@@ -87,6 +101,7 @@ module.exports = class CarRepository {
         passengers,
         transmission,
         price,
+        img,
         created_at,
         updated_at
         FROM cars`

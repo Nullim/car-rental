@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS cars (
   passengers INTEGER NOT NULL,
   transmission INTEGER NOT NULL,
   price INTEGER NOT NULL,
+  img INTEGER NOT NULL,
   created_at DATE DEFAULT (datetime('now', 'localtime')) NOT NULL,
   updated_at DATE DEFAULT (datetime('now', 'localtime')) NOT NULL
 );

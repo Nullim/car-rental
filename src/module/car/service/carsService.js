@@ -11,7 +11,14 @@ module.exports = class CarService {
    * @param {import('../entity/car')} car
    */
   save(car) {
-    this.carRepository.save(car);
+    return this.carRepository.save(car);
+  }
+  
+  /**
+   * @param {import('../entity/car')} car
+   */
+  delete(car) {
+    return this.carRepository.delete(car);
   }
 
   /**

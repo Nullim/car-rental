@@ -10,8 +10,8 @@
   <td>{{ car.transmission }}</td>
   <td>{{ car.price }}</td>
   <td>
-    <a href={{"/car/view/" + car.id}}>View</a>
-    <a href={{"/car/edit/" + car.id}}>Edit</a>
-    <a href={{"/car/delete/" + car.id}}>Delete</a>
+    <a class="button is-link" href="{{"/car/view/" + car.id}}">View</a>
+    <a class="button is-link is-primary" href="{{"/car/edit/" + car.id}}">Edit</a>
+    <a class="button is-link is-danger" href="{{"/car/delete/" + car.id}}">Delete</a>
   </td>
 </tr>
