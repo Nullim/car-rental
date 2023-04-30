@@ -1,6 +1,6 @@
 <form class="container mt-4" method="post" action="/car/save" enctype="multipart/form-data">
     {% if car %}
-      <input type="hidden" name="id" value="{{car.id}}">
+      <input type="hidden" name="id" value="{{ car.id }}">
     {% endif %}
     <div class="field">
       <label class="label">Brand</label>
@@ -101,7 +101,7 @@
       <div class="control has-icons-left">
         <div class="select">
           <select name="passengers">
-            <option>Choose an option</option>
+            <option disabled>Choose an option</option>
             <option value="1" {{ 'selected' if car.passengers === '1' }}>1</option>
             <option value="2" {{ 'selected' if car.passengers === '2' }}>2</option>
             <option value="3" {{ 'selected' if car.passengers === '3' }}>3</option>
@@ -122,7 +122,7 @@
       <div class="control has-icons-left">
         <div class="select">
           <select name="transmission">
-            <option>Choose an option</option>
+            <option disabled>Choose an option</option>
             <option value="Automatic" {{ 'selected' if car.transmission === 'Automatic' }}>Automatic</option>
             <option value="Manual" {{ 'selected' if car.transmission === 'Manual' }}>Manual</option>
             <option value="CVT" {{ 'selected' if car.transmission === 'CVT' }}>CVT</option>
@@ -150,9 +150,14 @@
       <input type="hidden" name="created_at" value="{{ car.createdAt }}">
     {% endif %}
     <div class="container">
+      <input type="hidden" name="img" value="{{ car.img }}">
       <div class="field">
         <label class="label">Car Image</label>
-        <img src="{{ car.img if car img else '/img/default.png' }}" alt="car-image">
+        {% if car.img %}
+          <img src="{{ car.img }}" alt="car-image">
+        {% else %}
+          <img src="/img/default.png" alt="default-car-image">
+        {% endif %}
         <div class="control">
           <input class="input" type="file" name="car-image">
         </div>
@@ -163,7 +168,7 @@
         <button class="button is-link" type="submit">Submit</button>
       </div>
       <div class="control">
-        <button class="button is-link is-danger">Cancel</button>
+        <button class="button is-link is-danger" type="button" onclick="if(confirm('Are you sure you want to cancel?')) window.location.href='/'">Cancel</button>
       </div>
     </div>
   </form>

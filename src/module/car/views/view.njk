@@ -7,7 +7,11 @@
         <div class="columns is-mobile is-centered is-vcentered">
           <div class="column">
             <figure class="image is-5by4">
-              <img src="{{ car.img if car.img else '/img/default.png' }}" alt="car-image">
+              {% if car.img %}
+                <img src="{{ car.img }}" alt="car-image">
+              {% else %}
+                <img src="/img/default.png" alt="default-car-image">
+              {% endif %}
             </figure>
           </div>
           <div class="column">
@@ -52,8 +56,8 @@
                 </tbody>
               </table>
               <div class="buttons">
-                <a class="button is-link" href="{{ "/car/edit" + car.id }}">Edit</a>
-                <a class="button is-danger" href="{{ "/car/delete" + car.id }}">Delete</a>
+                <a class="button is-link" href="{{ "/car/edit/" + car.id }}">Edit</a>
+                <a class="button is-danger" href="{{ "/car/delete/" + car.id }}">Delete</a>
               </div>
           </div>
         </div>

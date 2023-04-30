@@ -4,9 +4,7 @@ const path = require('path');
 const Sqlite3Database = require('better-sqlite3');
 const multer = require('multer');
 
-const { CarController, CarService, CarRepository } = require('../module/car/module');
-
-const container = new DIContainer()
+const { CarController, CarsService, CarsRepository } = require('../module/car/module');
 
 function configureMainDatabaseAdapter() {
   const database = new Sqlite3Database(process.env.DB_PATH, { verbose: console.log });
@@ -41,15 +39,16 @@ function addCommonDefinitions(container) {
 /**
  * @param {DIContainer} container
  */
-function addCarModuleDefinitions() {
+function addCarModuleDefinitions(container) {
   container.add({
-    CarController: object(CarController).construct(use('Multer'), use('CarService')),
-    CarService: object(CarService).construct(use('CarRepository')),
-    CarRepository: object(CarRepository).construct(use('MainDatabaseAdapter'))
+    CarController: object(CarController).construct(use('Multer'), use('CarsService')),
+    CarsService: object(CarsService).construct(use('CarsRepository')),
+    CarsRepository: object(CarsRepository).construct(use('MainDatabaseAdapter'))
   });
 }
 
 module.exports = function configureDI() {
+  const container = new DIContainer()
   addCommonDefinitions(container);
   addCarModuleDefinitions(container);
   return container;

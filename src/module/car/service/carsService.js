@@ -1,34 +1,34 @@
 module.exports = class CarService {
   /**
    * 
-   * @param {import('../repository/carsRepository')} carRepository 
+   * @param {import('../repository/carsRepository')} carsRepository 
    */
-  constructor(carRepository) {
-    this.carRepository = carRepository;
+  constructor(carsRepository) {
+    this.carsRepository = carsRepository;
   }
 
   /**
    * @param {import('../entity/car')} car
    */
   save(car) {
-    return this.carRepository.save(car);
+    return this.carsRepository.save(car);
   }
   
   /**
    * @param {import('../entity/car')} car
    */
   delete(car) {
-    return this.carRepository.delete(car);
+    return this.carsRepository.delete(car);
   }
 
   /**
   * @param {number} carId
   */
   getById(carId) {
-    return this.carRepository.getById(carId);
+    return this.carsRepository.getById(carId);
   }
 
   getAll() {
-    return this.carRepository.getAll();
+    return this.carsRepository.getAll();
   }
 };

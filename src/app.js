@@ -3,14 +3,14 @@ const express = require('express');
 const nunjucks = require('nunjucks');
 const bodyParser = require('body-parser');
 
-const configureDependencyInjection = require('.config/di');
+const configureDependencyInjection = require('./config/di');
 const { init: initCarModule } = require('./module/car/module');
 
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use('/public', express.static('public'));
+app.use(express.static('public'));
 
 nunjucks.configure('src/module', { 
   autoescape: true,

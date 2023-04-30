@@ -14,7 +14,7 @@ exports.fromDbToEntity = ({
   img,
   created_at: createdAt,
   updated_at: updatedAt,
-}) => {
+}) =>
   new Car(
     id,
     brand,
@@ -30,7 +30,6 @@ exports.fromDbToEntity = ({
     createdAt,
     updatedAt
   );
-}
 
 exports.fromFormToEntity = ({
   id,
@@ -46,16 +45,4 @@ exports.fromFormToEntity = ({
   img,
   'created-at': createdAt,
 }) =>
-  new Car(
-    id, 
-    brand, 
-    model, 
-    year, 
-    kms, 
-    color, 
-    ac, 
-    passengers, 
-    transmission, 
-    price, 
-    img, 
-    createdAt);
+  new Car(id, brand, model, year, kms, color, ac, passengers, transmission, price, img, createdAt);

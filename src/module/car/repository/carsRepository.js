@@ -34,25 +34,25 @@ module.exports = class CarRepository {
       );
       stmt.run(brand, model, year, kms, color, ac, passengers, transmission, price, img, id);
       return this.getById(id);
-    } else {
-      const stmt = this.databaseAdapter.prepare(
-        `INSERT INTO cars(
-          brand,
-          model,
-          year,
-          kms,
-          color,
-          ac,
-          passengers,
-          transmission,
-          price,
-          img
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-      );
-      const latestCar = stmt.run(brand, model, year, kms, color, ac, passengers, transmission, price, img);
-      const { mostRecentCarId } = latestCar;
-      return this.getById(mostRecentCarId)
     }
+
+    const stmt = this.databaseAdapter.prepare(
+      `INSERT INTO cars(
+            brand,
+            model,
+            year,
+            kms,
+            color,
+            ac,
+            passengers,
+            transmission,
+            price,
+            img
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    );
+    const mostRecentCar = stmt.run(brand, model, year, kms, color, ac, passengers, transmission, price, img);
+    const { lastInsertRowid } = mostRecentCar;
+    return this.getById(lastInsertRowid);
   }
 
   delete(car) {
@@ -89,7 +89,7 @@ module.exports = class CarRepository {
   }
 
   getAll() {
-    const stmt = this.database.prepare(
+    const stmt = this.databaseAdapter.prepare(
       `SELECT
         id,
         brand,
