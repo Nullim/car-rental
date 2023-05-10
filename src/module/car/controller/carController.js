@@ -21,8 +21,8 @@ module.exports = class CarController {
     app.get(`${ROUTE}/delete/:carId`, this.delete.bind(this));
   }
 
-  index(req, res) {
-    const cars = this.carsService.getAll();
+  async index(req, res) {
+    const cars = await this.carsService.getAll();
     const [lastAddedCar] = cars.reverse()
     res.render(`${this.CAR_VIEWS}/index.njk`, {
       cars,
@@ -30,17 +30,17 @@ module.exports = class CarController {
     })
   }
 
-  view(req, res) {
+  async view(req, res) {
     const { carId } = req.params;
-    const car = this.carsService.getById(carId);
+    const car = await this.carsService.getById(carId);
     res.render(`${this.CAR_VIEWS}/view.njk`, {
       car
     });
   }
 
-  edit(req, res) {
+  async edit(req, res) {
     const { carId } = req.params;
-    const car = this.carsService.getById(carId);
+    const car = await this.carsService.getById(carId);
     res.render(`${this.CAR_VIEWS}/edit.njk`, {
       car
     });
@@ -50,20 +50,20 @@ module.exports = class CarController {
     res.render(`${this.CAR_VIEWS}/add.njk`);
   }
 
-  save(req, res) {
+  async save(req, res) {
     const car = fromFormToEntity(req.body);
     if (req.file) {
       const path = req.file.path.split('public')[1];
       car.img = path
     }
-    this.carsService.save(car);
+    await this.carsService.save(car);
     res.redirect('/');
   }
 
-  delete(req, res) {
+  async delete(req, res) {
     const { carId } = req.params;
     const car = this.carsService.getById(carId);
-    this.carsService.delete(car);
+    await this.carsService.delete(car);
     res.redirect('/');
   }
 }

@@ -10,25 +10,25 @@ module.exports = class CarService {
   /**
    * @param {import('../entity/car')} car
    */
-  save(car) {
+  async save(car) {
     return this.carsRepository.save(car);
   }
   
   /**
    * @param {import('../entity/car')} car
    */
-  delete(car) {
+  async delete(car) {
     return this.carsRepository.delete(car);
   }
 
   /**
   * @param {number} carId
   */
-  getById(carId) {
+  async getById(carId) {
     return this.carsRepository.getById(carId);
   }
 
-  getAll() {
+  async getAll() {
     return this.carsRepository.getAll();
   }
 };

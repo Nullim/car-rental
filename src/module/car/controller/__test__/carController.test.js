@@ -41,8 +41,8 @@ describe('CarController Testing', () => {
     expect(uploadMock.single).toHaveBeenCalled();
   });
 
-  test('index.njk is rendered', () => {
-    mockController.index(reqMock, resMock);
+  test('index.njk is rendered', async () => {
+    await mockController.index(reqMock, resMock);
 
     expect(serviceMock.getAll).toHaveBeenCalledTimes(1);
     expect(resMock.render).toHaveBeenCalledWith('car/views/index.njk', {
@@ -51,8 +51,8 @@ describe('CarController Testing', () => {
     });
   });
 
-  test('view.njk is rendered', () => {
-    mockController.view(reqMock, resMock);
+  test('view.njk is rendered', async () => {
+    await mockController.view(reqMock, resMock);
 
     expect(serviceMock.getById).toHaveBeenCalledTimes(1);
     expect(resMock.render).toHaveBeenCalledWith('car/views/view.njk', {
@@ -60,8 +60,8 @@ describe('CarController Testing', () => {
     });
   });
 
-  test('edit.njk is rendered with a form to edit a car', () => {
-    mockController.edit(reqMock, resMock);
+  test('edit.njk is rendered with a form to edit a car', async () => {
+    await mockController.edit(reqMock, resMock);
 
     expect(serviceMock.getById).toHaveBeenCalledTimes(1);
     expect(resMock.render).toHaveBeenCalledWith('car/views/edit.njk', {
@@ -75,19 +75,19 @@ describe('CarController Testing', () => {
     expect(resMock.render).toHaveBeenCalledWith('car/views/add.njk');
   });
 
-  test('saves car with image', () => {
+  test('saves car with image', async () => {
     const reqSaveMock = {
       body: {},
       file: { path: '' }
     };
 
-    mockController.save(reqSaveMock, resMock);
+    await mockController.save(reqSaveMock, resMock);
     expect(serviceMock.save).toHaveBeenCalledTimes(1);
     expect(resMock.redirect).toHaveBeenCalledTimes(1);
   })
 
-  test('deletes a car', () => {
-    mockController.delete(reqMock, resMock);
+  test('deletes a car', async () => {
+    await mockController.delete(reqMock, resMock);
 
     expect(serviceMock.delete).toHaveBeenCalledTimes(1);
     expect(resMock.redirect).toHaveBeenCalledTimes(1);
