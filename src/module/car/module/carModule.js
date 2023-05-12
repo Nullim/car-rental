@@ -1,7 +1,7 @@
-const CarController = require('./controller/carController');
-const CarService = require('./service/carService');
-const CarRepository = require('./repository/carsRepository');
-const CarModel = require('./model/carModel');
+const CarController = require('../controller/carController');
+const CarService = require('../service/carService');
+const CarRepository = require('../repository/carsRepository');
+const CarModel = require('../model/carModel')
 
 /**
  * @param {import('express').Application} app

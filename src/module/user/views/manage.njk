@@ -1,0 +1,35 @@
+{% extends "view/layout/home.njk" %}
+
+{% block body %}
+<section class="section">
+    <div class="container">
+      <nav class="columns">
+        <div class="column has-text-centered">
+          <p class="heading">Total Users</p>
+          <p class="title">{{ users.length }}</p>
+        </div>
+      </nav>
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>ID Type</th>
+            <th>ID Number</th>
+            <th>Nationality</th>
+            <th>Address</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Birthdate</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+            {% include "user/views/layouts/user-list.njk" %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+{% endblock %}

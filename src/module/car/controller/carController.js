@@ -62,8 +62,8 @@ module.exports = class CarController {
 
   async delete(req, res) {
     const { carId } = req.params;
-    const car = this.carsService.getById(carId);
-    await this.carsService.delete(car);
+    const car = await this.carsService.getById(carId);
+    this.carsService.delete(car);
     res.redirect('/');
   }
 }

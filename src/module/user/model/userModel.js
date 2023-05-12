@@ -1,11 +1,12 @@
-const { DataTypes, Model } = require('sequelize')
+const { DataTypes, Model } = require('sequelize');
 
-class CarModel extends Model {
+class UserModel extends Model {
   /**
    * @param {import('sequelize').Sequelize} sequelizeInstance
    */
+
   static initialize(sequelizeInstance) {
-    CarModel.init(
+    UserModel.init(
       {
         id: {
           type: DataTypes.INTEGER,
@@ -14,61 +15,51 @@ class CarModel extends Model {
           allowNull: false,
           unique: true
         },
-        brand: {
+        firstName: {
           type: DataTypes.STRING,
           allowNull: false
         },
-        model: {
+        lastName: {
           type: DataTypes.STRING,
           allowNull: false
         },
-        year: {
+        idType: {
+          type: DataTypes.STRING,
+          allowNull: false
+        },
+        idNumber: {
           type: DataTypes.INTEGER,
           allowNull: false
         },
-        kms: {
-          type: DataTypes.INTEGER,
-          allowNull: false,
-          validate: {
-            min: 0
-          }
-        },
-        color: {
+        nationality: {
           type: DataTypes.STRING,
           allowNull: false
         },
-        ac: {
+        address: {
           type: DataTypes.STRING,
           allowNull: false
         },
-        passengers: {
-          type: DataTypes.STRING,
-          allowNull: false
-          
-        },
-        transmission: {
+        phoneNumber: {
           type: DataTypes.STRING,
           allowNull: false
         },
-        price: {
-          type: DataTypes.FLOAT,
-          allowNull: false,
-          validate: {
-            min: 1
-          }
+        email: {
+          type: DataTypes.STRING,
+          allowNull: false
         },
-        img: {
-          type: DataTypes.INTEGER,
+        birthday: {
+          type: DataTypes.STRING,
+          allowNull: false
         }
       },
       {
         sequelize: sequelizeInstance,
-        modelName: 'Car'
+        modelName: 'User'
       }
     );
 
-    return CarModel;
+    return UserModel;
   }
 }
 
-module.exports = CarModel;
+module.exports = UserModel

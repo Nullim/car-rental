@@ -1,0 +1,69 @@
+{% extends "view/layout/home.njk" %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">{{ user.firstName }} {{ user.lastName }}</h1><br>
+        <div class="columns is-mobile is-centered is-vcentered">
+          <div class="column">
+              <table class="content is-large">
+                <thead>
+                  <tr>
+                    <th>User Info</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>User ID:</td>
+                    <td>{{ user.id }}</td>
+                  </tr>
+                  <tr>
+                    <td>Document Type:</td>
+                    <td>{{ user.idType }}</td>
+                  </tr>
+                  <tr>
+                    <td>Document Number:</td>
+                    <td>{{ user.idNumber }}</td>
+                  </tr>
+                  <tr>
+                    <td>Nationality:</td>
+                    <td>{{ user.nationality }}</td>
+                  </tr>
+                  <tr>
+                    <td>Address:</td>
+                    <td>{{ user.address }}</td>
+                  </tr>
+                  <tr>
+                    <td>Phone Number:</td>
+                    <td>{{ user.phoneNumber }}</td>
+                  </tr>
+                  <tr>
+                    <td>Email:</td>
+                    <td>{{ user.email }}</td>
+                  </tr>
+                  <tr>
+                    <td>Birthdate:</td>
+                    <td>{{ user.birthday }}</td>
+                  </tr>
+                  <tr>
+                    <td>Added:</td>
+                    <td>{{ user.createdAt }}</td>
+                  </tr>
+                  <tr>
+                    <td>Updated:</td>
+                    <td>{{ user.updatedAt }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="buttons">
+                <a class="button is-link" href="{{ "/user/edit/" + user.id }}">Edit</a>
+                <a class="button is-danger" href="{{ "/user/delete/" + user.id }}">Delete</a>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

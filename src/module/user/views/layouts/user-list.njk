@@ -1,0 +1,17 @@
+<tr>
+  <th>{{ user.id }}</th>
+  <td>{{ user.firstName }}</td>
+  <td>{{ user.lastName }}</td>
+  <td>{{ user.idType }}</td>
+  <td>{{ user.idNumber }}</td>
+  <td>{{ user.nationality }}</td>
+  <td>{{ user.address }}</td>
+  <td>{{ user.phoneNumber }}</td>
+  <td>{{ user.email }}</td>
+  <td>{{ user.formattedBirthday }}</td>
+  <td>
+    <a class="button is-link" href="{{"/user/view/" + user.id}}">View</a>
+    <a class="button is-link is-primary" href="{{"/user/edit/" + user.id}}">Edit</a>
+    <a class="button is-link is-danger" href="{{"/user/delete/" + user.id}}">Delete</a>
+  </td>
+</tr>

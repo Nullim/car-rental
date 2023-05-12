@@ -5,7 +5,7 @@ const { carNoId, carWithId } = require('./cars.fixture');
 
 describe ('CarsRepository Testing', () => {
   const sequelize = new Sequelize('sqlite::memory');
-  const car = carModel.setup(sequelize);
+  const car = carModel.initialize(sequelize);
   const repository = new CarsRepository(car);
 
   beforeEach(async () => {

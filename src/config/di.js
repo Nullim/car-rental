@@ -1,24 +1,28 @@
+/* eslint-disable no-undef */
 const { default: DIContainer, factory, use, object } = require ('rsdi');
 const path = require('path');
 const { Sequelize } = require('sequelize');
 const multer = require('multer');
 
 const { CarController, CarsService, CarsRepository, CarModel } = require('../module/car/module');
+const { UserController, UserService, UserRepository, UserModel } = require('../module/user/module');
 
-function configureSequelizeDatabase() {
-  const sequelize = new Sequelize({
+function configureMainSequelizeDatabase() {
+  return new Sequelize({
     dialect: 'sqlite',
     storage: process.env.DB_PATH
   });
-  return sequelize;
 }
 
 /**
  * @param {DIContainer} container 
  */
-
 function configureCarModule(container) {
-  return CarModel.setup(container.use('sequelize'))
+  return CarModel.initialize(container.get('Sequelize'));
+}
+
+function configureUserModule(container) {
+  return UserModel.initialize(container.get('Sequelize'));
 }
 
 function configureMulter() {
@@ -35,19 +39,14 @@ function configureMulter() {
   return multer({ storage });
 }
 
-/**
- * @param {DIContainer} container
- */
 function addCommonDefinitions(container) {
   container.add({
-    Sequelize: factory(configureSequelizeDatabase),
-    Multer: factory(configureMulter),
+    Sequelize: factory(configureMainSequelizeDatabase),
+    Multer: factory(configureMulter)
   });
 }
 
-/**
- * @param {DIContainer} container
- */
+
 function addCarModuleDefinitions(container) {
   container.add({
     CarController: object(CarController).construct(use('Multer'), use('CarsService')),
@@ -57,9 +56,19 @@ function addCarModuleDefinitions(container) {
   });
 }
 
+function addUserModuleDefinitions(container) {
+  container.add({
+    UserController: object(UserController).construct(use('UserService'), use('Multer')),
+    UserService: object(UserService).construct(use('UserRepository')),
+    UserRepository: object(UserRepository).construct(use('UserModel')),
+    UserModel: factory(configureUserModule)
+  })
+}
+
 module.exports = function configureDI() {
   const container = new DIContainer()
   addCommonDefinitions(container);
   addCarModuleDefinitions(container);
+  addUserModuleDefinitions(container);
   return container;
 }

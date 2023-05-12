@@ -1,0 +1,11 @@
+{% extends "view/layout/home.njk" %}
+
+{% block body %}
+  <section class="hero">
+    <div class="hero-body has-text-centered">
+      <p class="title">Adding a new user</p>
+      <p class="subtitle">Please fill out the form</p>
+    </div>
+  </section>
+  {% include "user/views/layouts/form.njk" %}
+{% endblock %}

@@ -1,6 +1,7 @@
 const CarController = require('./controller/carController');
 const CarsService = require('./service/carsService');
 const CarsRepository = require('./repository/carsRepository');
+const CarModel = require('./model/carModel');
 
 /**
  * @param {import('express').Application} app
@@ -19,5 +20,6 @@ module.exports = {
   init,
   CarController,
   CarsService,
-  CarsRepository
+  CarsRepository,
+  CarModel
 }

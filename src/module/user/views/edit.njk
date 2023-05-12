@@ -1,0 +1,11 @@
+{% extends "view/layout/home.njk" %}
+
+{% block body %}
+  <section class="hero">
+    <div class="hero-body has-text-centered">
+      <p class="title">Editing an user with ID {{ user.id }}</p>
+      <p class="subtitle">Please choose the options you wish to change</p>
+    </div>
+  </section>
+  {% include "user/views/layouts/form.njk" %}
+{% endblock %}
