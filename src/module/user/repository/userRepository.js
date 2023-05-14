@@ -1,4 +1,8 @@
-const { fromDbToEntity } = require ('../mapper/userMapper');
+const { fromModelToEntity } = require ('../mapper/userMapper');
+const userIdUndefined = require('../error/userIdUndefined');
+const userUndefined = require('../error/userUndefined');
+const userNotFound = require('../error/userNotFound');
+const User = require('../entity/user');
 
 module.exports = class UserRepository {
   /**
@@ -10,11 +14,14 @@ module.exports = class UserRepository {
   }
 
   async save(user) {
+    if (!(user instanceof User)) {
+      throw new userUndefined();
+    }
     const userInstance = this.userModel.build(user, {
       isNewRecord: !user.id
     });
     await userInstance.save();
-    return fromDbToEntity(userInstance);
+    return fromModelToEntity(userInstance);
   }
 
   async delete(user) {
@@ -28,13 +35,19 @@ module.exports = class UserRepository {
   }
 
   async getById(userId) {
+    if(!Number(userId)) {
+      throw new userIdUndefined();
+    }
     const userInstance = await this.userModel.findByPk(userId);
-    return fromDbToEntity(userInstance);
+    if(!userInstance) {
+      throw new userNotFound();
+    }
+    return fromModelToEntity(userInstance);
   }
 
   async getAll() {
     const userList = await this.userModel.findAll();
-    const users = userList.map((user) => fromDbToEntity(user));
+    const users = userList.map((user) => fromModelToEntity(user));
     return users;
   }
 }

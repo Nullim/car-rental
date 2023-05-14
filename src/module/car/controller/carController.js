@@ -1,4 +1,5 @@
 const { fromFormToEntity } = require('../mapper/carMapper');
+const carIdUndefined = require('../error/carIdUndefined');
 
 module.exports = class CarController {
   /**
@@ -32,6 +33,9 @@ module.exports = class CarController {
 
   async view(req, res) {
     const { carId } = req.params;
+    if (!Number(carId)) {
+      throw new carIdUndefined();
+    }
     const car = await this.carsService.getById(carId);
     res.render(`${this.CAR_VIEWS}/view.njk`, {
       car
@@ -40,6 +44,9 @@ module.exports = class CarController {
 
   async edit(req, res) {
     const { carId } = req.params;
+    if (!Number(carId)) {
+      throw new carIdUndefined();
+    }
     const car = await this.carsService.getById(carId);
     res.render(`${this.CAR_VIEWS}/edit.njk`, {
       car

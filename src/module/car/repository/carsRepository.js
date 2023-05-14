@@ -1,4 +1,8 @@
-const { fromDbToEntity } = require('../mapper/carMapper');
+const Car = require('../entity/car');
+const { fromModelToEntity } = require('../mapper/carMapper');
+const carIdUndefined = require('../error/carIdUndefined');
+const carNotFound = require('../error/carNotFound');
+const carUndefined = require('../error/carUndefined');
 
 module.exports = class CarRepository {
   /**
@@ -14,11 +18,14 @@ module.exports = class CarRepository {
    */
 
   async save(car) {
+    if(!(car instanceof Car)) {
+      throw new carUndefined();
+    }
     const carInstance = this.carModel.build(car, {
       isNewRecord: !car.id
     });
     await carInstance.save();
-    return fromDbToEntity(carInstance);
+    return fromModelToEntity(carInstance);
   }
 
   async delete(car) {
@@ -35,13 +42,19 @@ module.exports = class CarRepository {
   * @param {number} carId
   */
   async getById(carId) {
+    if(!Number(carId)) {
+      throw new carIdUndefined();
+    }
     const carInstance = await this.carModel.findByPk(carId);
-    return fromDbToEntity(carInstance);
+    if(!carInstance) {
+      throw new carNotFound();
+    }
+    return fromModelToEntity(carInstance);
   }
 
   async getAll() {
     const carInstances = await this.carModel.findAll();
-    const cars = carInstances.map((carInstance) => fromDbToEntity(carInstance));
+    const cars = carInstances.map((carInstance) => fromModelToEntity(carInstance));
     return cars;
   }
 }

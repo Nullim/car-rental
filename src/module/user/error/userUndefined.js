@@ -1,0 +1,1 @@
+module.exports = class userUndefined extends Error {};

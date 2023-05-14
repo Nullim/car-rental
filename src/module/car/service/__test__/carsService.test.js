@@ -1,4 +1,7 @@
 const CarsService = require('../carsService');
+const testCarCreator = require('../../repository/__test__/cars.fixture');
+const carUndefined = require('../../error/carUndefined');
+const carIdUndefined = require('../../error/carIdUndefined');
 
 const repositoryMock = {
   save: jest.fn(),
@@ -10,11 +13,17 @@ const repositoryMock = {
 const mockService = new CarsService(repositoryMock);
 
 describe('CarsService Testing', () => {
-  test('calls repository for saving', async () => {
-    await mockService.save({});
+  test('calls repository for saving a car', async () => {
+    const carWithId = testCarCreator(1)
+    await mockService.save(carWithId);
 
     expect(repositoryMock.save).toHaveBeenCalledTimes(1)
-    expect(repositoryMock.save).toHaveBeenCalledWith({});
+    expect(repositoryMock.save).toHaveBeenCalledWith(carWithId);
+  });
+
+  test('throws an error on incomplete car arguments', async () => {
+    const car = { id: 2, brand: 'Ford', model: 'Mustang GT 5.0', year: '2018' }
+    await expect(mockService.save(car)).rejects.toThrowError(carUndefined);
   });
 
   test('calls repository to get a car by its id', async () => {
@@ -22,6 +31,10 @@ describe('CarsService Testing', () => {
     
     expect(repositoryMock.getById).toHaveBeenCalledTimes(1);
     expect(repositoryMock.getById).toHaveBeenCalledWith(1);
+  });
+
+  test('throw an error on invalid carId', async () => {
+    await expect(mockService.getById()).rejects.toThrowError(carIdUndefined);
   });
 
   test('calls repository to get all cars from database', async () => {

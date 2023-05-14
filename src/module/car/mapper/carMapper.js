@@ -1,6 +1,6 @@
 const Car = require('../entity/car');
 
-exports.fromDbToEntity = ({
+exports.fromModelToEntity = ({
   id,
   brand,
   model,
@@ -8,8 +8,8 @@ exports.fromDbToEntity = ({
   kms,
   color,
   ac,
-  passengers,
   transmission,
+  passengers,
   price,
   img,
   createdAt,
@@ -23,8 +23,8 @@ exports.fromDbToEntity = ({
     Number(kms),
     color,
     ac,
-    Number(passengers),
     transmission,
+    Number(passengers),
     Number(price),
     img,
     createdAt,
@@ -39,10 +39,10 @@ exports.fromFormToEntity = ({
   kms,
   color,
   ac,
-  passengers,
   transmission,
+  passengers,
   price,
   img,
   'created-at': createdAt,
 }) =>
-  new Car(id, brand, model, year, kms, color, ac, passengers, transmission, price, img, createdAt);
+  new Car(id, brand, model, year, kms, color, ac, transmission, passengers, price, img, createdAt);

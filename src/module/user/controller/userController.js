@@ -1,4 +1,5 @@
 const { fromFormToEntity } = require('../mapper/userMapper');
+const userIdUndefined = require('../error/userIdUndefined');
 
 module.exports = class UserController {
   /**
@@ -24,6 +25,9 @@ module.exports = class UserController {
 
   async view(req, res) {
     const { userId } = req.params;
+    if (!Number(userId)) {
+      throw new userIdUndefined();
+    }
     const user = await this.userService.getById(userId);
     const birthday = new Date(user.birthday).toLocaleString(false, {
       year: 'numeric',
@@ -60,6 +64,9 @@ module.exports = class UserController {
 
   async edit(req, res) {
     const { userId } = req.params;
+    if (!Number(userId)) {
+      throw new userIdUndefined();
+    }
     const user = await this.userService.getById(userId);
     res.render(`${this.USER_VIEWS}/edit.njk`, {
       user
@@ -69,13 +76,13 @@ module.exports = class UserController {
   async save(req, res) {
     const user = fromFormToEntity(req.body);
     await this.userService.save(user);
-    res.redirect(`${this.USER_VIEWS}/manage`)
+    res.redirect(`manage`)
   }
 
   async delete(req, res) {
     const { userId } = req.params;
     const user = await this.userService.getById(userId)
     this.userService.delete(user)
-    res.redirect(`${this.USER_VIEWS}/manage.njk`)
+    res.redirect(`../manage`)
   }
 }

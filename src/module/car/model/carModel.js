@@ -44,7 +44,6 @@ class CarModel extends Model {
         passengers: {
           type: DataTypes.STRING,
           allowNull: false
-          
         },
         transmission: {
           type: DataTypes.STRING,

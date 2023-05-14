@@ -1,12 +1,12 @@
 {% block body %}
-<form class="container mt-4" method="post" action="/user/save" enctype="multipart/form-data">
+<form class="container mt-4" method="post" action="/user/save">
   {% if user %}
     <input type="hidden" name="id" value="{{ user.id }}">
   {% endif %}
   <div class="field">
     <label class="label">First Name</label>
     <div class="control">
-      <input required class="input" type="text" name="first-name"
+      <input required class="input" type="text" name="first-name" autocomplete="off"
       {% if user %}
         value="{{ user.firstName }}"
       {% endif %}
@@ -16,7 +16,7 @@
   <div class="field">
     <label class="label">Last Name</label>
     <div class="control">
-      <input required class="input" type="text" name="last-name"
+      <input required class="input" type="text" name="last-name" autocomplete="off"
       {% if user %}
         value="{{ user.lastName }}"
       {% endif %}
@@ -52,7 +52,7 @@
   <div class="field">
     <label class="label">Nationality</label>
     <div class="control has-icons-left">
-      <input required class="input" type="text" name="nationality"
+      <input required class="input" type="text" name="nationality" autocomplete="off"
       {% if user %}
         value="{{ user.nationality }}"
       {% endif %}
@@ -65,7 +65,7 @@
   <div class="field">
     <label class="label">Address</label>
     <div class="control has-icons-left">
-      <input required class="input" type="text" name="address"
+      <input required class="input" type="text" name="address" autocomplete="off"
       {% if user %}
         value="{{ user.address }}"
       {% endif %}
@@ -78,7 +78,7 @@
   <div class="field">
     <label class="label">Phone Number</label>
     <div class="control has-icons-left">
-      <input required class="input" type="number" name="phone-number"
+      <input required class="input" type="text" name="phone-number"
       {% if user %}
         value="{{ user.phoneNumber }}"
       {% endif %}
@@ -91,7 +91,7 @@
   <div class="field">
     <label class="label">Email Address</label>
     <div class="control has-icons-left">
-      <input required class="input" type="text" name="email"
+      <input required class="input" type="text" name="email" autocomplete="off"
       {% if user %}
         value="{{ user.email }}"
       {% endif %}

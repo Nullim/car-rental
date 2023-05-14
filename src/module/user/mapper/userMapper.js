@@ -1,6 +1,6 @@
-const User = require('../entity/User');
+const User = require('../entity/user');
 
-exports.fromDbToEntity = ({
+exports.fromModelToEntity = ({
   id,
   firstName,
   lastName,
@@ -40,7 +40,7 @@ exports.fromFormToEntity = ({
   'phone-number': phoneNumber,
   email,
   birthday,
-  'created-at': createdAt,
+  'created-at': createdAt
 }) =>
   new User(
     id,

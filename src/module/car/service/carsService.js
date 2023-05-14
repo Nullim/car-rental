@@ -1,3 +1,7 @@
+const Car = require('../entity/car');
+const carIdUndefined = require('../error/carIdUndefined');
+const carUndefined = require('../error/carUndefined');
+
 module.exports = class CarService {
   /**
    * 
@@ -11,6 +15,9 @@ module.exports = class CarService {
    * @param {import('../entity/car')} car
    */
   async save(car) {
+    if(!(car instanceof Car)) {
+      throw new carUndefined();
+    }
     return this.carsRepository.save(car);
   }
   
@@ -25,6 +32,9 @@ module.exports = class CarService {
   * @param {number} carId
   */
   async getById(carId) {
+    if(!Number(carId)) {
+      throw new carIdUndefined
+    }
     return this.carsRepository.getById(carId);
   }
 
