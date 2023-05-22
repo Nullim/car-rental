@@ -4,8 +4,20 @@ const carIdUndefined = require('../../error/carIdUndefined');
 
 const serviceMock = {
   save: jest.fn(),
-  getById: jest.fn((id) => testCarCreator(id)),
-  getAll: jest.fn(() => Array.from({ length: 2 }, (id) => testCarCreator(id))),
+  getById: jest.fn((id) => {
+    return {
+      car: testCarCreator(id),
+      reservations: Array.from({ length: 2 }, (reservationId) => {
+        return {
+          id: reservationId,
+          carId: '1'
+        }
+      })
+    }
+  }),
+  getAll: jest.fn(() => Array.from({ length: 2 }, (id) => testCarCreator(id + 1))),
+  getCarsLength: jest.fn(() => 2),
+  getLastCar: jest.fn(() => testCarCreator(2)),
   delete: jest.fn()
 };
 
@@ -48,22 +60,28 @@ describe('CarController Testing', () => {
 
   test('index.njk is rendered', async () => {
     const cars = serviceMock.getAll()
+    const carsLength = serviceMock.getCarsLength();
+    const lastAddedCar = serviceMock.getLastCar();
     await mockController.index(reqMock, resMock);
 
+    expect(serviceMock.getCarsLength).toHaveBeenCalledTimes(2);
+    expect(serviceMock.getLastCar).toHaveBeenCalledTimes(2);
     expect(serviceMock.getAll).toHaveBeenCalledTimes(2);
     expect(resMock.render).toHaveBeenCalledWith('car/views/index.njk', {
       cars,
-      lastAddedCar: cars[1]
+      carsLength,
+      lastAddedCar
     });
   });
 
   test('view.njk is rendered', async () => {
-    const car = serviceMock.getById(1);
+    const { car, reservations } = serviceMock.getById(1);
     await mockController.view(reqMock, resMock);
 
     expect(serviceMock.getById).toHaveBeenCalledTimes(2);
     expect(resMock.render).toHaveBeenCalledWith('car/views/view.njk', {
-      car
+      car,
+      reservations
     });
   });
 
@@ -74,7 +92,7 @@ describe('CarController Testing', () => {
   })
 
   test('edit.njk is rendered with a form to edit a car', async () => {
-    const car = serviceMock.getById(1);
+    const { car } = serviceMock.getById(1);
     await mockController.edit(reqMock, resMock);
 
     expect(serviceMock.getById).toHaveBeenCalledTimes(2);

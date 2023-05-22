@@ -1,14 +1,19 @@
 const { Sequelize } = require('sequelize');
 const CarsRepository = require('../carsRepository');
-const carModel = require('../../model/carModel');
+const CarModel = require('../../model/carModel');
+const ReservationsModel = require('../../../reservations/model/reservationsModel')
 const testCarCreator = require('./cars.fixture');
+const testReservationCreator = require('../../../reservations/controller/__test__/reservations.fixture');
 const carIdUndefined = require('../../error/carIdUndefined');
 const carNotFound = require('../../error/carNotFound');
 const carUndefined = require('../../error/carUndefined');
 
 describe ('CarsRepository Testing', () => {
-  const sequelize = new Sequelize('sqlite::memory');
-  const car = carModel.initialize(sequelize);
+  const sequelize = new Sequelize('sqlite::memory', { logging: false });
+  const car = CarModel.initialize(sequelize);
+  const reservations = ReservationsModel.initialize(sequelize);
+  car.hasMany(reservations, { foreignKey: 'carId' })
+  reservations.belongsTo(car, { foreignKey: 'carId' })
   const repository = new CarsRepository(car);
   const newCar = testCarCreator()
 
@@ -68,13 +73,37 @@ describe ('CarsRepository Testing', () => {
     expect(cars[1].id).toEqual(2);
   })
 
-  test('getById returns specified car', async () => {
+  test('getCarsLength returns number of cars in the database', async () => {
+    await repository.save(newCar);
+    await repository.save(newCar);
+    await repository.save(newCar);
+    const carsLength = await repository.getCarsLength();
+
+    expect(carsLength).toEqual(3);
+  })
+
+  test('getLastCar returns the most recently added car', async () => {
+    await repository.save(newCar);
+    const carTwo = await repository.save(newCar);
+    const lastAddedCar = await repository.getLastCar();
+
+    expect(lastAddedCar).toEqual(carTwo);
+  })
+
+  test('getById returns specified car and its reservations', async () => {
+    const reservation = testReservationCreator()
+
     await repository.save(newCar);
     await repository.save(newCar);
     await repository.save(newCar);
 
-    const requestedCar = await repository.getById(2);
-    expect(requestedCar.id).toEqual(2);
+    const requestedCar = await repository.carModel.findByPk(2);
+    await requestedCar.createReservation(reservation);
+    await requestedCar.createReservation(reservation);
+
+    const { car, reservations } = await repository.getById(2);
+    expect(car.id).toEqual(2);
+    expect(reservations).toHaveLength(2);
   })
 
   test('getById throws an error on undefined id', async () => {
@@ -90,7 +119,8 @@ describe ('CarsRepository Testing', () => {
     await repository.save(newCar);
     await repository.save(newCar);
 
-    const deletedCar = await repository.delete({ id: 1 });
+    const { car: firstCar } = await repository.getById(1)
+    const deletedCar = await repository.delete(firstCar);
     const remainingCars = await repository.getAll();
     
     expect(deletedCar).toEqual(true);

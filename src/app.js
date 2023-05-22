@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const configureDependencyInjection = require('./config/di');
 const { init: initCarModule } = require('./module/car/module');
 const { init: initUserModule } = require('./module/user/module');
+const { init: initReservationModule } = require('./module/reservations/module')
 
 const app = express();
 const port = 3000;
@@ -22,6 +23,7 @@ const container = configureDependencyInjection(app);
 
 initCarModule(app, container);
 initUserModule(app, container);
+initReservationModule(app, container);
 
 /**
  * @type {import('./module/car/controller/carController')} carController;

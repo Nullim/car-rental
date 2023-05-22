@@ -13,6 +13,7 @@
                 <img src="/img/default.png" alt="default-car-image">
               {% endif %}
             </figure>
+            {% include "car/views/layout/reservations-list.njk" %}
           </div>
           <div class="column">
               <span class="title">Price: {{ car.price }}$</span><br>

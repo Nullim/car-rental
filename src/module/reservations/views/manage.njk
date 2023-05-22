@@ -1,0 +1,40 @@
+{% extends "view/layout/home.njk" %}
+
+{% block body %}
+<section class="section">
+    <div class="container">
+      <nav class="columns">
+        <div class="column has-text-centered">
+          <p class="heading">Total Reservations</p>
+          <p class="title">{{ reservations.length }}</p>
+        </div>
+      </nav>
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Rental Daily Price</th>
+            <th>Total Price</th>
+            <th>Payment Method</th>
+            <th>Payment Status</th>
+            <th>Status</th>
+            <th>Car ID</th>
+            <th>User ID</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for reservation in reservations %}
+            {% include "reservations/views/layouts/reservation-list.njk" %}
+          {% endfor %}
+        </tbody>
+      </table>
+      {% include "reservations/views/layouts/modal.njk" %}
+    </div>
+{% endblock %}
+
+{% block footerScripts %}
+  <script type="text/javascript" src="/js/reservations-modals.js"></script>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "view/layout/home.njk" %}
+
+{% block body %}
+<section class="hero">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">Car Reservation #{{ reservation.id }}</h1><br>
+        <div class="columns is-mobile is-centered is-vcentered">
+          <div class="column">
+              <table class="content is-large">
+                <thead>
+                  <tr>
+                    <th>Reservation Info</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Reservation ID:</td>
+                    <td>{{ reservation.id }}</td>
+                  </tr>
+                  <tr>
+                    <td>Start Date:</td>
+                    <td>{{ reservation.formattedDates.startDate }}</td>
+                  </tr>
+                  <tr>
+                    <td>End Date:</td>
+                    <td>{{ reservation.formattedDates.endDate }}</td>
+                  </tr>
+                  <tr>
+                    <td>Rented Car:</td>
+                    <td>
+                      <a href="{{ "/car/view/" + car.id }}">{{ car.id + "# " + car.brand + " " + car.model + " " + car.year }}</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Rental Daily Price:</td>
+                    <td>{{ reservation.rentalDailyPrice }}$</td>
+                  </tr>
+                  <tr>
+                    <td>Final price:</td>
+                    <td>{{ reservation.totalPrice }}</td>
+                  </tr>
+                  <tr>
+                    <td>Payment Method:</td>
+                    <td>{{ reservation.paymentMethod }}</td>
+                  </tr>
+                  <tr>
+                    <td>Payment status:</td>
+                    <td>{{ "Paid" if reservation.paymentStatus else "Pending" }}</td>
+                  </tr>
+                  <tr>
+                    <td>Status:</td>
+                    <td>{{ reservation.status }}</td>
+                  </tr>
+                  <tr>
+                    <td>Created on:</td>
+                    <td>{{ reservation.createdAt }}</td>
+                  </tr>
+                  <tr>
+                    <td>Updated on:</td>
+                    <td>{{ reservation.updatedAt }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="buttons">
+                <a class="button is-link" href="{{ "/reservations/edit/" + reservation.id }}">Edit</a>
+                <a class="button is-danger" href="{{ "/reservations/delete/" + reservation.id }}">Delete</a>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

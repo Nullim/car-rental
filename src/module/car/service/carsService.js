@@ -28,6 +28,14 @@ module.exports = class CarService {
     return this.carsRepository.delete(car);
   }
 
+  async getCarsLength() {
+    return this.carsRepository.getCarsLength();
+  }
+
+  async getLastCar() {
+    return this.carsRepository.getLastCar();
+  }
+
   /**
   * @param {number} carId
   */

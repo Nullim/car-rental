@@ -1,0 +1,35 @@
+<div class="tile is-parent">
+  <article class="tile is-child notification is-info">
+    <div class="content">
+      <p class="title">Reservation List</p>
+      <div class="content">
+        {% if reservations.length > 0 %}
+          <table class="table align-middle">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Rental Daily Price</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for reservation in reservations | reverse %}
+                <tr>
+                  <th>{{ reservation.id }}</th>
+                  <td>{{ reservation.formattedDates.startDate }}</td>
+                  <td>{{ reservation.formattedDates.endDate }}</td>
+                  <td>{{ reservation.rentalDailyPrice }}</td>
+                  <td>{{ reservation.status }}</td>
+                </tr>
+              {% endfor %}
+              {% else %}
+                <p class="subtitle">There are no reservations</p>
+              {% endif %}
+            </tbody>
+          </table>
+      </div>
+    </div>
+  </article>
+</div>

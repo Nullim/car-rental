@@ -4,8 +4,18 @@ const userIdUndefined = require('../../error/userIdUndefined');
 
 const mockService = {
   save: jest.fn(),
-  getById: jest.fn((id) => testUserCreator(id)),
-  getAll: jest.fn(() => Array.from({ length: 2 }, (id) => testUserCreator(id))),
+  getById: jest.fn((id) => {
+    return {
+      user: testUserCreator(id),
+      reservations: Array.from({ length: 2 }, (reservationId) => {
+        return {
+          id: reservationId + 1,
+          carId: '1'
+        }
+      })
+    }
+  }),
+  getAll: jest.fn(() => Array.from({ length: 2 }, (id) => testUserCreator(id + 1))),
   delete: jest.fn()
 };
 
@@ -42,12 +52,7 @@ describe('UserController testing', () => {
   })
   
   test('manage.njk is rendered', async () => {
-    const users = mockService.getAll().map((user) => {
-      const formattedUser = Object.assign(user);
-      formattedUser.formattedBirthday = '25/12/1997';
-      return formattedUser;
-    })
-
+    const users = mockService.getAll();
     await mockController.manage(reqMock, resMock)
 
     expect(mockService.getAll).toHaveBeenCalledTimes(2);
@@ -57,13 +62,13 @@ describe('UserController testing', () => {
   })
 
   test('view.njk is rendered', async () => {
-    const user = mockService.getById(1);
+    const { user, reservations } = mockService.getById(1);
     await mockController.view(reqMock, resMock)
     
     expect(mockService.getById).toHaveBeenCalledTimes(2);
     expect(resMock.render).toHaveBeenCalledWith('user/views/view.njk', {
       user,
-      birthday: '25/12/1997'
+      reservations
     })
   })
 
@@ -74,7 +79,7 @@ describe('UserController testing', () => {
   })
 
   test('edit.njk is rendered', async() => {
-    const user = mockService.getById(1);
+    const { user } = mockService.getById(1);
     await mockController.edit(reqMock, resMock);
 
     expect(mockService.getById).toHaveBeenCalledTimes(2);

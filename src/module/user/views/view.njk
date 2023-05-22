@@ -45,7 +45,7 @@
                   </tr>
                   <tr>
                     <td>Birthdate:</td>
-                    <td>{{ user.birthday }}</td>
+                    <td>{{ user.formattedBirthday }}</td>
                   </tr>
                   <tr>
                     <td>Added:</td>
@@ -61,6 +61,9 @@
                 <a class="button is-link" href="{{ "/user/edit/" + user.id }}">Edit</a>
                 <a class="button is-danger" href="{{ "/user/delete/" + user.id }}">Delete</a>
               </div>
+          </div>
+          <div class="column">
+            {% include "user/views/layouts/reservations-list.njk" %}
           </div>
         </div>
       </div>

@@ -28,31 +28,15 @@ module.exports = class UserController {
     if (!Number(userId)) {
       throw new userIdUndefined();
     }
-    const user = await this.userService.getById(userId);
-    const birthday = new Date(user.birthday).toLocaleString(false, {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-      timeZone: 'UTC'
-    })
+    const { user, reservations } = await this.userService.getById(userId);
     res.render(`${this.USER_VIEWS}/view.njk`, {
       user,
-      birthday
+      reservations
     })
   }
 
   async manage(req, res) {
-    const userList = await this.userService.getAll()
-    const users = userList.map((user) => {
-      const newUser = Object.assign(user);
-      newUser.formattedBirthday = new Date(user.birthday).toLocaleString(false, {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        timeZone: 'UTC'
-      });
-      return newUser;
-    })
+    const users = await this.userService.getAll()
     res.render(`${this.USER_VIEWS}/manage.njk`, {
       users
     })
@@ -67,7 +51,7 @@ module.exports = class UserController {
     if (!Number(userId)) {
       throw new userIdUndefined();
     }
-    const user = await this.userService.getById(userId);
+    const { user } = await this.userService.getById(userId);
     res.render(`${this.USER_VIEWS}/edit.njk`, {
       user
     })

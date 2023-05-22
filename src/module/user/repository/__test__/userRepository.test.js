@@ -1,14 +1,19 @@
 const { Sequelize } = require('sequelize');
 const UserRepository = require('../userRepository');
-const userModel = require('../../model/userModel');
+const UserModel = require('../../model/userModel');
+const ReservationsModel = require('../../../reservations/model/reservationsModel');
 const testUserCreator = require('../../controller/__test__/user.fixture');
+const testReservationCreator = require('../../../reservations/controller/__test__/reservations.fixture');
 const userIdUndefined = require('../../error/userIdUndefined');
 const userUndefined = require('../../error/userUndefined');
 const userNotFound = require('../../error/userNotFound');
 
 describe ('UserRepository Testing', () => {
-  const sequelize = new Sequelize('sqlite::memory');
-  const user = userModel.initialize(sequelize);
+  const sequelize = new Sequelize('sqlite::memory', { logging: false });
+  const user = UserModel.initialize(sequelize);
+  const reservations = ReservationsModel.initialize(sequelize);
+  user.hasMany(reservations, { foreignKey: 'userId' });
+  reservations.belongsTo(user, { foreignKey: 'userId' });
   const repository = new UserRepository(user);
   const newUser = testUserCreator();
 
@@ -68,13 +73,19 @@ describe ('UserRepository Testing', () => {
     expect(users[1].id).toEqual(2);
   })
 
-  test('getById returns specified user', async () => {
+  test('getById returns specified user and its reservations', async () => {
+    const reservation = testReservationCreator();
     await repository.save(newUser);
     await repository.save(newUser);
     await repository.save(newUser);
 
-    const requestedUser = await repository.getById(2);
-    expect(requestedUser.id).toEqual(2);
+    const requestedUser = await repository.userModel.findByPk(2);
+    await requestedUser.createReservation(reservation);
+    await requestedUser.createReservation(reservation);
+
+    const { user, reservations } = await repository.getById(2);
+    expect(user.id).toEqual(2);
+    expect(reservations).toHaveLength(2);
   })
 
   test('getById throws an error on undefined id', async () => {

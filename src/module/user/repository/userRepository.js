@@ -1,8 +1,10 @@
 const { fromModelToEntity } = require ('../mapper/userMapper');
+const { fromModelToEntity: fromReservationModelToEntity } = require ('../../reservations/mapper/reservationMapper');
 const userIdUndefined = require('../error/userIdUndefined');
 const userUndefined = require('../error/userUndefined');
 const userNotFound = require('../error/userNotFound');
 const User = require('../entity/user');
+const ReservationsModel = require('../../reservations/model/reservationsModel');
 
 module.exports = class UserRepository {
   /**
@@ -38,11 +40,16 @@ module.exports = class UserRepository {
     if(!Number(userId)) {
       throw new userIdUndefined();
     }
-    const userInstance = await this.userModel.findByPk(userId);
+    const userInstance = await this.userModel.findByPk(userId, {include: ReservationsModel});
     if(!userInstance) {
       throw new userNotFound();
     }
-    return fromModelToEntity(userInstance);
+    const user = fromModelToEntity(userInstance);
+    const reservations = userInstance.Reservations.map((instance) => 
+      fromReservationModelToEntity(instance)
+    )
+
+    return { user, reservations };
   }
 
   async getAll() {
