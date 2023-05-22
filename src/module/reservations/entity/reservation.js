@@ -75,6 +75,9 @@ module.exports = class Reservation {
 
   determineReservationStatus(isFinished) {
     if (isFinished) {
+      if (this.paymentStatus !== true){
+        throw new Error("Cannot finish an unpaid reservation")
+      }
       this.status = 'Finished';
       return;
     }
