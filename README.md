@@ -8,9 +8,10 @@ CRUD made in Node.js to create, read, update and delete cars, users and reservat
 
 To correctly run the application locally, you must follow these steps:
 - Clone the repo
-- Once you've cloned the repo, run 'npm install' to install dependencies. If this doesn't work, make sure you have Node.js installed on your computer
-- Create an '.env' file on the project root, based on the contents of '.env.dist' located in the same folder
-- To run the server, run the command 'npm run nodemon' on the terminal to start the app through Nodemon.
+- Once you've cloned the repo, run `npm install` to install dependencies. If this doesn't work, make sure you have Node.js installed on your computer
+- Create an `.env` file on the project root, based on the contents of `.env.dist` located in the same folder
+- Run the command `npm run db:migrate` to migrate the database before running the server
+- To run the server, run the command `npm run nodemon` on the terminal to start the app through Nodemon.
 - Visit the URL indicated by the console (by default: http://localhost:3000)
 
 ## C4 Diagrams
