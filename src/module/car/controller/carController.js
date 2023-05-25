@@ -40,26 +40,31 @@ module.exports = class CarController {
   }
 
   async view(req, res) {
-    const { carId } = req.params;
-    if (!Number(carId)) {
-      throw new carIdUndefined();
+    try { 
+      const { carId } = req.params;
+      const { car, reservations } = await this.carsService.getById(carId);
+      res.render(`${this.CAR_VIEWS}/view.njk`, {
+        car,
+        reservations
+      });
+    } catch (e) {
+      res.render(`${this.CAR_VIEWS}/error.njk`, { error: e.message })
     }
-    const { car, reservations } = await this.carsService.getById(carId);
-    res.render(`${this.CAR_VIEWS}/view.njk`, {
-      car,
-      reservations
-    });
   }
 
   async edit(req, res) {
-    const { carId } = req.params;
-    if (!Number(carId)) {
-      throw new carIdUndefined();
+    try{
+      const { carId } = req.params;
+      if (!Number(carId)) {
+        throw new carIdUndefined();
+      }
+      const { car } = await this.carsService.getById(carId);
+      res.render(`${this.CAR_VIEWS}/edit.njk`, {
+        car
+      });
+    } catch (e) {
+      res.render(`${this.CAR_VIEWS}/error.njk`, { error: e.message })
     }
-    const { car } = await this.carsService.getById(carId);
-    res.render(`${this.CAR_VIEWS}/edit.njk`, {
-      car
-    });
   }
 
   add(req, res) {
@@ -67,19 +72,27 @@ module.exports = class CarController {
   }
 
   async save(req, res) {
-    const car = fromFormToEntity(req.body);
-    if (req.file) {
-      const path = req.file.path.split('public')[1];
-      car.img = path
+    try {
+      const car = fromFormToEntity(req.body);
+      if (req.file) {
+        const path = req.file.path.split('public')[1];
+        car.img = path
+      }
+      await this.carsService.save(car);
+      res.redirect('/');
+    } catch (e) {
+      res.render(`${this.CAR_VIEWS}/error.njk`, { error: e.message })
     }
-    await this.carsService.save(car);
-    res.redirect('/');
   }
 
   async delete(req, res) {
-    const { carId } = req.params;
-    const { car } = await this.carsService.getById(carId);
-    this.carsService.delete(car);
-    res.redirect('/');
+    try {
+      const { carId } = req.params;
+      const { car } = await this.carsService.getById(carId);
+      this.carsService.delete(car);
+      res.redirect('/');
+    } catch (e) {
+      res.render(`${this.CAR_VIEWS}/error.njk`, { error: e.message })
+    }
   }
 }

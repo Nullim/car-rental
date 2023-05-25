@@ -24,15 +24,19 @@ module.exports = class UserController {
   }
 
   async view(req, res) {
-    const { userId } = req.params;
-    if (!Number(userId)) {
-      throw new userIdUndefined();
+    try {
+      const { userId } = req.params;
+      if (!Number(userId)) {
+        throw new userIdUndefined();
+      }
+      const { user, reservations } = await this.userService.getById(userId);
+      res.render(`${this.USER_VIEWS}/view.njk`, {
+        user,
+        reservations
+      })
+    } catch (e) {
+      res.render(`${this.USER_VIEWS}/error.njk`, { error: e.message})
     }
-    const { user, reservations } = await this.userService.getById(userId);
-    res.render(`${this.USER_VIEWS}/view.njk`, {
-      user,
-      reservations
-    })
   }
 
   async manage(req, res) {
@@ -47,26 +51,38 @@ module.exports = class UserController {
   }
 
   async edit(req, res) {
-    const { userId } = req.params;
-    if (!Number(userId)) {
-      throw new userIdUndefined();
+    try {
+      const { userId } = req.params;
+      if (!Number(userId)) {
+        throw new userIdUndefined();
+      }
+      const { user } = await this.userService.getById(userId);
+      res.render(`${this.USER_VIEWS}/edit.njk`, {
+        user
+      })
+    } catch (e) {
+      res.render(`${this.USER_VIEWS}/error.njk`, { error: e.message})
     }
-    const { user } = await this.userService.getById(userId);
-    res.render(`${this.USER_VIEWS}/edit.njk`, {
-      user
-    })
   }
 
   async save(req, res) {
-    const user = fromFormToEntity(req.body);
-    await this.userService.save(user);
-    res.redirect(`manage`)
+    try {
+      const user = fromFormToEntity(req.body);
+      await this.userService.save(user);
+      res.redirect(`manage`)
+    } catch (e) {
+      res.render(`${this.USER_VIEWS}/error.njk`, { error: e.message})
+    }
   }
 
   async delete(req, res) {
-    const { userId } = req.params;
-    const user = await this.userService.getById(userId)
-    this.userService.delete(user)
-    res.redirect(`../manage`)
+    try {
+      const { userId } = req.params;
+      const user = await this.userService.getById(userId)
+      this.userService.delete(user)
+      res.redirect(`../manage`)
+    } catch (e) {
+      res.render(`${this.USER_VIEWS}/error.njk`, { error: e.message})
+    }
   }
 }

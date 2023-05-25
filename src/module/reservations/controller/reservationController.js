@@ -44,50 +44,63 @@ module.exports = class ReservationController {
   }
 
   async view(req, res) {
-    const { reservationId } = req.params;
-    if(!Number(reservationId)) {
-      throw new reservationIdUndefined();
-    }
+    try {
+      const { reservationId } = req.params;
+      if(!Number(reservationId)) {
+        throw new reservationIdUndefined();
+      }
 
-    const { reservation, car, user } = await this.reservationService.getById(reservationId);
-    res.render(`${this.RESERVATION_VIEWS}/view.njk`, {
-      reservation,
-      car,
-      user
-    })
+      const { reservation, car, user } = await this.reservationService.getById(reservationId);
+      res.render(`${this.RESERVATION_VIEWS}/view.njk`, {
+        reservation,
+        car,
+        user
+      })
+    } catch (e) {
+      res.render(`${this.RESERVATION_VIEWS}/error.njk`, { error: e.message})
+    }
   }
 
   async add(req, res) {
     const cars = await this.carService.getAll();
     const users = await this.userService.getAll();
+
     res.render(`${this.RESERVATION_VIEWS}/add.njk`, {
       cars,
       users
-    })
+    });
   }
 
   async save(req, res) {
-    const reservation = fromFormToEntity(req.body);
-    const { car } = await this.carService.getById(reservation.carId)
-    await this.reservationService.save(reservation, car);
-    res.redirect(`${this.ROUTE_BASE}/manage`);
+    try {
+      const reservation = fromFormToEntity(req.body);
+      const { car } = await this.carService.getById(reservation.carId)
+      await this.reservationService.save(reservation, car);
+      res.redirect(`${this.ROUTE_BASE}/manage`);
+    } catch (e) {
+      res.render(`${this.RESERVATION_VIEWS}/error.njk`, { error: e.message})
+    }
   }
 
   async edit(req, res) {
-    const { reservationId } = req.params;
-    if(!Number(reservationId)) {
-      throw new reservationIdUndefined();
+    try {
+      const { reservationId } = req.params;
+      if(!Number(reservationId)) {
+        throw new reservationIdUndefined();
+      }
+
+      const cars = await this.carService.getAll();
+      const users = await this.userService.getAll();
+
+      const { reservation } = await this.reservationService.getById(reservationId);
+      res.render(`${this.RESERVATION_VIEWS}/edit.njk`, {
+        reservation,
+        cars,
+        users
+      })
+    } catch (e) {
+      res.render(`${this.RESERVATION_VIEWS}/error.njk`, { error: e.message})
     }
-
-    const cars = await this.carService.getAll();
-    const users = await this.userService.getAll();
-
-    const { reservation } = await this.reservationService.getById(reservationId);
-    res.render(`${this.RESERVATION_VIEWS}/edit.njk`, {
-      reservation,
-      cars,
-      users
-    })
   }
 
   async finish(req, res) {

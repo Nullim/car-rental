@@ -24,6 +24,8 @@ module.exports = class ReservationRepository {
   async save(reservation) {
     if(!(reservation instanceof Reservation)) {
       throw new reservationUndefined();
+    } else if(reservation.startDate > reservation.endDate) {
+      throw new reservationUndefined("Start Date cannot go after End Date")
     }
 
     const reservationInstance = this.reservationsModel.build(reservation, {

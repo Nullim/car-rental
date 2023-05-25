@@ -31,4 +31,8 @@ initReservationModule(app, container);
 const carController = container.get('CarController');
 app.get('/', carController.index.bind(carController));
 
+app.use((err, req, res, next) => {
+  res.status(500).render('view/error.njk', { title: "Something went wrong!", error: err})
+})
+
 app.listen(port, () => console.log(`Server listening at http://localhost:${port}`));
