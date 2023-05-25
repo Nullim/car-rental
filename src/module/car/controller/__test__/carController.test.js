@@ -1,8 +1,7 @@
 const CarController = require('../carController');
 const testCarCreator = require('../../repository/__test__/cars.fixture');
-const carIdUndefined = require('../../error/carIdUndefined');
 
-const serviceMock = {
+const mockService = {
   save: jest.fn(),
   getById: jest.fn((id) => {
     return {
@@ -29,20 +28,16 @@ const reqMock = {
   params: { carId: 1}
 };
 
-const reqMockNoId = {
-  params: {}
-}
-
 const resMock = {
   render: jest.fn(),
   redirect: jest.fn()
 };
 
-const mockController = new CarController(uploadMock, serviceMock)
+const mockController = new CarController(uploadMock, mockService)
 
 describe('CarController Testing', () => {
   afterEach(() => {
-    Object.values(serviceMock).forEach((mockFn) => mockFn.mockClear());
+    Object.values(mockService).forEach((mockFn) => mockFn.mockClear());
     Object.values(resMock).forEach((mockFn) => mockFn.mockClear());
   });
 
@@ -59,14 +54,14 @@ describe('CarController Testing', () => {
   });
 
   test('index.njk is rendered', async () => {
-    const cars = serviceMock.getAll()
-    const carsLength = serviceMock.getCarsLength();
-    const lastAddedCar = serviceMock.getLastCar();
+    const cars = mockService.getAll()
+    const carsLength = mockService.getCarsLength();
+    const lastAddedCar = mockService.getLastCar();
     await mockController.index(reqMock, resMock);
 
-    expect(serviceMock.getCarsLength).toHaveBeenCalledTimes(2);
-    expect(serviceMock.getLastCar).toHaveBeenCalledTimes(2);
-    expect(serviceMock.getAll).toHaveBeenCalledTimes(2);
+    expect(mockService.getCarsLength).toHaveBeenCalledTimes(2);
+    expect(mockService.getLastCar).toHaveBeenCalledTimes(2);
+    expect(mockService.getAll).toHaveBeenCalledTimes(2);
     expect(resMock.render).toHaveBeenCalledWith('car/views/index.njk', {
       cars,
       carsLength,
@@ -74,37 +69,53 @@ describe('CarController Testing', () => {
     });
   });
 
+  test('index.njk renders if there are no cars in database', async() => {
+    const cars = mockService.getAll()
+    const carsLength = mockService.getCarsLength();
+    mockService.getLastCar.mockRejectedValue()
+    await mockController.index(reqMock, resMock);
+
+    expect(mockService.getCarsLength).toHaveBeenCalledTimes(2);
+    expect(mockService.getAll).toHaveBeenCalledTimes(2);
+    expect(mockService.getLastCar).toHaveBeenCalledTimes(1);
+    expect(resMock.render).toHaveBeenCalledWith('car/views/index.njk', {
+      cars,
+      carsLength,
+      lastAddedCar: null
+    });
+  })
+
   test('view.njk is rendered', async () => {
-    const { car, reservations } = serviceMock.getById(1);
+    const { car, reservations } = mockService.getById(1);
     await mockController.view(reqMock, resMock);
 
-    expect(serviceMock.getById).toHaveBeenCalledTimes(2);
+    expect(mockService.getById).toHaveBeenCalledTimes(2);
     expect(resMock.render).toHaveBeenCalledWith('car/views/view.njk', {
       car,
       reservations
     });
   });
 
-  test('view.njk throws an error when the car id is not defined', async () => {
-    await expect(() => mockController.view(reqMockNoId, resMock)).rejects.toThrowError(
-      carIdUndefined
-    );
+  test('view.njk renders error.njk when an error is thrown', async () => {
+    mockService.getById.mockImplementationOnce(() => Promise.reject(new Error('Test')))
+    await mockController.view(reqMock, resMock)
+    expect(resMock.render).toHaveBeenCalledWith('car/views/error.njk', { error: 'Test' })
   })
 
   test('edit.njk is rendered with a form to edit a car', async () => {
-    const { car } = serviceMock.getById(1);
+    const { car } = mockService.getById(1);
     await mockController.edit(reqMock, resMock);
 
-    expect(serviceMock.getById).toHaveBeenCalledTimes(2);
+    expect(mockService.getById).toHaveBeenCalledTimes(2);
     expect(resMock.render).toHaveBeenCalledWith('car/views/edit.njk', {
       car
     });
   });
 
-  test('edit.njk throws an error when the car id is not defined', async () => {
-    await expect(() => mockController.edit(reqMockNoId, resMock)).rejects.toThrowError(
-      carIdUndefined
-    );
+  test('edit.njk renders error.njk when an error is thrown', async () => {
+    mockService.getById.mockImplementationOnce(() => Promise.reject(new Error('Test')))
+    await mockController.edit(reqMock, resMock)
+    expect(resMock.render).toHaveBeenCalledWith('car/views/error.njk', { error: 'Test' })
   })
 
   test('add.njk is rendered with a form to add a car', () => {
@@ -120,14 +131,41 @@ describe('CarController Testing', () => {
     };
 
     await mockController.save(reqSaveMock, resMock);
-    expect(serviceMock.save).toHaveBeenCalledTimes(1);
+    expect(mockService.save).toHaveBeenCalledTimes(1);
     expect(resMock.redirect).toHaveBeenCalledTimes(1);
+  })
+
+  test('saves car without image', async () => {
+    const reqSaveMock = {
+      body: {}
+    };
+
+    await mockController.save(reqSaveMock, resMock);
+    expect(mockService.save).toHaveBeenCalledTimes(1);
+    expect(resMock.redirect).toHaveBeenCalledTimes(1);
+  })
+
+  test('saving renders error.njk when an error is thrown', async () => {
+    const reqSaveMock = {
+      body: {},
+      file: { path: '' }
+    };
+
+    mockService.save.mockRejectedValue(new Error('Test'))
+    await mockController.save(reqSaveMock, resMock)
+    expect(resMock.render).toHaveBeenCalledWith('car/views/error.njk', { error: 'Test' })
   })
 
   test('deletes a car', async () => {
     await mockController.delete(reqMock, resMock);
 
-    expect(serviceMock.delete).toHaveBeenCalledTimes(1);
+    expect(mockService.delete).toHaveBeenCalledTimes(1);
     expect(resMock.redirect).toHaveBeenCalledTimes(1);
+  })
+
+  test('deleting renders error.njk when an error is thrown', async () => {
+    mockService.getById.mockImplementationOnce(() => Promise.reject(new Error('Test')))
+    await mockController.delete(reqMock, resMock)
+    expect(resMock.render).toHaveBeenCalledWith('car/views/error.njk', { error: 'Test' })
   })
 })

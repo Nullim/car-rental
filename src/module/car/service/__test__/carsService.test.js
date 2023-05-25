@@ -7,7 +7,9 @@ const repositoryMock = {
   save: jest.fn(),
   getAll: jest.fn(),
   getById: jest.fn(),
-  delete: jest.fn()
+  delete: jest.fn(),
+  getLastCar: jest.fn(),
+  getCarsLength: jest.fn()
 };
 
 const mockService = new CarsService(repositoryMock);
@@ -48,5 +50,17 @@ describe('CarsService Testing', () => {
 
     expect(repositoryMock.delete).toHaveBeenCalledTimes(1);
     expect(repositoryMock.delete).toHaveBeenCalledWith({});
+  });
+
+  test('calls repository to get last car added to database', async () => {
+    await mockService.getLastCar();
+
+    expect(repositoryMock.getLastCar).toHaveBeenCalledTimes(1);
+  });
+
+  test('calls repository to get how many cars are in the database', async () => {
+    await mockService.getCarsLength();
+
+    expect(repositoryMock.getCarsLength).toHaveBeenCalledTimes(1);
   });
 });

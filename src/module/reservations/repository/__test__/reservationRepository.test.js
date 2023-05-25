@@ -50,6 +50,13 @@ describe('ReservationRepository testing', () => {
     await expect(repository.save(reservation)).rejects.toThrowError(reservationUndefined);
   })
 
+  test('save throws an error with invalid date', async() => {
+    const reservation = testReservationCreator()
+    reservation.startDate = '2023-04-16T14:00'
+    reservation.endDate = '2023-04-13T14:00'
+    await expect(repository.save(reservation)).rejects.toThrowError(reservationUndefined);
+  })
+
   test('getAll returns every reservation in database', async() => {
     await repository.save(newReservation);
     await repository.save(newReservation);

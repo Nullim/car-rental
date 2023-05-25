@@ -86,11 +86,12 @@ describe('ReservationController testing', () => {
     })
   })
 
-  test('view.njk throws an error with undefined reservation id', async() => {
-    const reqMockEmpty = {
-      params: {}
+  test('view.njk renders error.njk when an error is thrown', async() => {
+    const reqMockNoId = {
+      params: {reservationId: null}
     }
-    await expect(() => mockController.view(reqMockEmpty, resMock)).rejects.toThrowError(reservationIdUndefined);
+    await mockController.view(reqMockNoId, resMock)
+    expect(resMock.render).toHaveBeenCalledWith('reservations/views/error.njk', { error: '' })
   })
 
   test('edit.njk is rendered', async() => {
@@ -107,11 +108,12 @@ describe('ReservationController testing', () => {
     })
   })
 
-  test('edit.njk throws an error with undefined reservation id', async() => {
-    const reqMockEmpty = {
-      params: {}
+  test('edit.njk renders error.njk when an error is thrown', async() => {
+    const reqMockNoId = {
+      params: {reservationId: null}
     }
-    await expect(() => mockController.edit(reqMockEmpty, resMock)).rejects.toThrowError(reservationIdUndefined);
+    await mockController.edit(reqMockNoId, resMock)
+    expect(resMock.render).toHaveBeenCalledWith('reservations/views/error.njk', { error: '' })
   })
 
   test('add.njk is rendered', async() => {
@@ -143,6 +145,15 @@ describe('ReservationController testing', () => {
     await mockController.save(reqSaveMock, resMock);
     expect(mockReservationService.save).toHaveBeenCalledWith(testReservationCreator(1), undefined);
     expect(resMock.redirect).toHaveBeenCalledTimes(1);
+  })
+
+  test('saving renders error.njk when an error is thrown', async () => {
+    const reqSaveMock = {
+      body: {}
+    }
+    mockReservationService.save.mockRejectedValue(new Error('Test'))
+    await mockController.save(reqSaveMock, resMock)
+    expect(resMock.render).toHaveBeenCalledWith('reservations/views/error.njk', { error: 'Test' })
   })
 
   test('mark reservation as finished', async() => {

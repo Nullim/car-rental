@@ -23,7 +23,7 @@ module.exports = class ReservationRepository {
 
   async save(reservation) {
     if(!(reservation instanceof Reservation)) {
-      throw new reservationUndefined();
+      throw new reservationUndefined("Reservation has invalid parameters");
     } else if(reservation.startDate > reservation.endDate) {
       throw new reservationUndefined("Start Date cannot go after End Date")
     }
@@ -36,19 +36,9 @@ module.exports = class ReservationRepository {
     return fromModelToEntity(reservationInstance);
   }
 
-  async delete(reservation) {
-    return Boolean(
-      await this.reservationsModel.destroy({
-        where: {
-          id: reservation.id
-        }
-      })
-    )
-  }
-
   async getById(reservationId) {
     if(!Number(reservationId)) {
-      throw new reservationIdUndefined();
+      throw new reservationIdUndefined(`There is no reservation with ID ${reservationId}`);
     }
     const reservationInstance = await this.reservationsModel.findByPk(reservationId, {
       include: [CarModel, UserModel]

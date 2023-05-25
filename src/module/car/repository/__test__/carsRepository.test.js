@@ -125,7 +125,7 @@ describe ('CarsRepository Testing', () => {
     
     expect(deletedCar).toEqual(true);
     expect(remainingCars[0].id).toEqual(2);
-   })
+  })
 
   test('deleting a non-existing car returns false', async () => {
     const deletedCar = await repository.delete ({ id: 1 });

@@ -48,14 +48,7 @@ class ReservationModel extends Model {
         sequelize: sequelizeInstance,
         modelName: 'Reservation',
         underscored: true,
-        paranoid: true,
-        validate: {
-          startDateIsEarlier() {
-            if (this.startDate > this.endDate) {
-              throw new Error('Start date must go before end date')
-            }
-          }
-        }
+        paranoid: true
       }
     );
     return ReservationModel;

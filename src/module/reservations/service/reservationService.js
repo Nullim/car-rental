@@ -20,10 +20,10 @@ module.exports = class ReservationService {
 
   async save(reservation, car) {
     if(!(reservation instanceof Reservation)) {
-      throw new reservationUndefined();
+      throw new reservationUndefined("Reservation did not have valid parameters");
     }
     if(!(car instanceof Car)) {
-      throw new carUndefined();
+      throw new carUndefined("Car did not have valid parameters");
     }
     reservation.calculateTotalPrice(car, reservation.rentalDailyPrice);
     reservation.determineReservationStatus();

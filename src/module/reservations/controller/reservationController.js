@@ -106,7 +106,7 @@ module.exports = class ReservationController {
   async finish(req, res) {
     const { reservationId } = req.params;
     if(!Number(reservationId)) {
-      throw new reservationIdUndefined();
+      throw new reservationIdUndefined("Reservation ID does not exist");
     }
     const { reservation } = await this.reservationService.getById(reservationId);
     await this.reservationService.finish(reservation);
@@ -116,7 +116,7 @@ module.exports = class ReservationController {
   async unblock(req, res) {
     const { reservationId } = req.params;
     if(!Number(reservationId)) {
-      throw new reservationIdUndefined();
+      throw new reservationIdUndefined("Reservation ID does not exist");
     }
     const { reservation } = await this.reservationService.getById(reservationId);
     await this.reservationService.unblock(reservation);
@@ -126,7 +126,7 @@ module.exports = class ReservationController {
   async pay(req, res) {
     const { reservationId } = req.params;
     if(!Number(reservationId)) {
-      throw new reservationIdUndefined();
+      throw new reservationIdUndefined("Reservation ID does not exist");
     }
     const { reservation } = await this.reservationService.getById(reservationId);
     await this.reservationService.pay(reservation);

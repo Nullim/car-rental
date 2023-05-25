@@ -1,6 +1,5 @@
 const UserController = require('../userController');
 const testUserCreator = require('./user.fixture');
-const userIdUndefined = require('../../error/userIdUndefined');
 
 const mockService = {
   save: jest.fn(),
@@ -21,10 +20,6 @@ const mockService = {
 
 const reqMock = {
   params: { userId: 1}
-};
-
-const reqMockNoId = {
-  params: {}
 };
 
 const resMock = {
@@ -73,9 +68,11 @@ describe('UserController testing', () => {
   })
 
   test('view.njk throws an error when the user id is not defined', async () => {
-    await expect(() => mockController.view(reqMockNoId, resMock)).rejects.toThrowError(
-      userIdUndefined
-    );
+    const reqMockNoId = {
+      params: { userId: null}
+    };
+    await mockController.view(reqMockNoId, resMock)
+    expect(resMock.render).toHaveBeenCalledWith('user/views/error.njk', { error: '' })
   })
 
   test('edit.njk is rendered', async() => {
@@ -89,9 +86,11 @@ describe('UserController testing', () => {
   })
 
   test('edit.njk throws an error when the user id is not defined', async () => {
-    await expect(() => mockController.edit(reqMockNoId, resMock)).rejects.toThrowError(
-      userIdUndefined
-    );
+    const reqMockNoId = {
+      params: { userId: null}
+    };
+    await mockController.edit(reqMockNoId, resMock)
+    expect(resMock.render).toHaveBeenCalledWith('user/views/error.njk', { error: '' })
   })
 
   test('add.njk renders a form to add users', () => {
@@ -110,10 +109,26 @@ describe('UserController testing', () => {
     expect(resMock.redirect).toHaveBeenCalledTimes(1);
   })
 
+  test('saving an user renders error.njk when an error is thrown', async () => {
+    const reqSaveMock = {
+      body: {}
+    };
+    
+    mockService.save.mockRejectedValue(new Error('Test'))
+    await mockController.save(reqSaveMock, resMock);
+    expect(resMock.render).toHaveBeenCalledWith('user/views/error.njk', { error: 'Test' })
+  })
+
   test('deletes an user', async () => {
     await mockController.delete(reqMock, resMock);
 
     expect(mockService.delete).toHaveBeenCalledTimes(1);
     expect(resMock.redirect).toHaveBeenCalledTimes(1);
+  })
+
+  test('deleting an user renders error.njk when an error is thrown', async () => {
+    mockService.getById.mockImplementationOnce(() => Promise.reject(new Error('Test')))
+    await mockController.delete(reqMock, resMock);
+    expect(resMock.render).toHaveBeenCalledWith('user/views/error.njk', { error: 'Test' })
   })
 })

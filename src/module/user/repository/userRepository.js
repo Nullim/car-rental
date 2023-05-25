@@ -17,7 +17,7 @@ module.exports = class UserRepository {
 
   async save(user) {
     if (!(user instanceof User)) {
-      throw new userUndefined();
+      throw new userUndefined("User has invalid parameters");
     }
     const userInstance = this.userModel.build(user, {
       isNewRecord: !user.id
@@ -38,11 +38,11 @@ module.exports = class UserRepository {
 
   async getById(userId) {
     if(!Number(userId)) {
-      throw new userIdUndefined();
+      throw new userIdUndefined(`The user with ID ${userId} does not exist`);
     }
     const userInstance = await this.userModel.findByPk(userId, {include: ReservationsModel});
     if(!userInstance) {
-      throw new userNotFound();
+      throw new userNotFound("User does not exist");
     }
     const user = fromModelToEntity(userInstance);
     const reservations = userInstance.Reservations.map((instance) => 
