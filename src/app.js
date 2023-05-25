@@ -9,7 +9,7 @@ const { init: initUserModule } = require('./module/user/module');
 const { init: initReservationModule } = require('./module/reservations/module')
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));

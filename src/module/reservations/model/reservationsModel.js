@@ -47,6 +47,8 @@ class ReservationModel extends Model {
       {
         sequelize: sequelizeInstance,
         modelName: 'Reservation',
+        underscored: true,
+        paranoid: true,
         validate: {
           startDateIsEarlier() {
             if (this.startDate > this.endDate) {
@@ -68,6 +70,8 @@ class ReservationModel extends Model {
     ReservationModel.belongsTo(CarModel, { foreignKey: 'carId', constraints: false });
     UserModel.hasMany(ReservationModel, { foreignKey: 'userId', constraints: false });
     ReservationModel.belongsTo(UserModel, { foreignKey: 'userId', constraints: false });
+    
+    return ReservationModel;
   }
 }
 

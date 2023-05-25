@@ -54,7 +54,9 @@ class UserModel extends Model {
       },
       {
         sequelize: sequelizeInstance,
-        modelName: 'User'
+        modelName: 'User',
+        underscored: true,
+        paranoid: true
       }
     );
 

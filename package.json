@@ -5,9 +5,13 @@
   "main": "app.js",
   "scripts": {
     "start": "node src/app.js",
-    "nodemon": "npm run schema:sync && nodemon ./src/app.js -e js,njk,html",
-    "schema:sync": "node src/cli/init.db.js",
-    "test": "jest --coverage"
+    "nodemon": "nodemon --inspect --watch ./src -e 'js,njk,html'",
+    "test": "jest --coverage",
+    "test:dev": "jest --watch",
+    "test:module:car": "jest src/module/car --coverage",
+    "test:module:user": "jest src/module/user --coverage",
+    "test:module:reservations": "jest src/module/reservations --coverage",
+    "db:migrate": "npx sequelize-cli db:migrate"
   },
   "repository": {
     "type": "git",
