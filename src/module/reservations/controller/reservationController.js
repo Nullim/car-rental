@@ -88,7 +88,6 @@ module.exports = class ReservationController {
       if(!Number(reservationId)) {
         throw new reservationIdUndefined();
       }
-
       const cars = await this.carService.getAll();
       const users = await this.userService.getAll();
 

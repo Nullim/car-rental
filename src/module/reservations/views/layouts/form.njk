@@ -53,7 +53,7 @@
         <select name="car-id">
           <option disabled>Choose a car</option>
           {% for car in cars %}
-            <option value="{{ car.id }}" {{ 'selected' if reservation.carId === car.id}}>
+            <option required value="{{ car.id }}" {{ 'selected' if reservation.carId === car.id}}>
               {{
                 car.id + "# - " + car.brand + " " + car.model + " " + car.year + " - Daily Price: " + car.price + "$ - "
                 + car.kms + " Kilometers - " + car.passengers + " passengers - " + car.transmission + " - AC: " + car.ac 
@@ -72,7 +72,7 @@
         <select name="user-id">
           <option disabled>Choose an User</option>
           {% for user in users %}
-            <option value="{{ user.id }}" {{ 'selected' if reservation.userId === user.id }}>
+            <option required value="{{ user.id }}" {{ 'selected' if reservation.userId === user.id }}>
               {{ user.id }}# - {{ user.firstName }} {{ user.lastName }}
             </option>
           {% endfor %}
