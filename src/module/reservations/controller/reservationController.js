@@ -1,5 +1,6 @@
 const { fromFormToEntity } = require('../mapper/reservationMapper');
 const reservationIdUndefined = require('../error/reservationIdUndefined');
+const reservationUndefined = require('../error/reservationUndefined');
 
 module.exports = class ReservationController {
   /**
@@ -62,13 +63,23 @@ module.exports = class ReservationController {
   }
 
   async add(req, res) {
-    const cars = await this.carService.getAll();
-    const users = await this.userService.getAll();
+    try {
+      const cars = await this.carService.getAll();
+      const users = await this.userService.getAll();
 
-    res.render(`${this.RESERVATION_VIEWS}/add.njk`, {
-      cars,
-      users
-    });
+      if (!cars.length) {
+        throw new reservationUndefined("There are no cars to create a reservation with")
+      } else if (!users.length) {
+        throw new reservationUndefined("There are no users to create a reservation with")
+      }
+
+      res.render(`${this.RESERVATION_VIEWS}/add.njk`, {
+        cars,
+        users
+      });
+    } catch (e) {
+      res.render(`${this.RESERVATION_VIEWS}/error.njk`, { error: e.message})
+    }
   }
 
   async save(req, res) {
@@ -103,32 +114,45 @@ module.exports = class ReservationController {
   }
 
   async finish(req, res) {
-    const { reservationId } = req.params;
-    if(!Number(reservationId)) {
-      throw new reservationIdUndefined("Reservation ID does not exist");
+    try {
+      const { reservationId } = req.params;
+      if(!Number(reservationId)) {
+        throw new reservationIdUndefined("Reservation ID does not exist");
+      }
+      const { reservation } = await this.reservationService.getById(reservationId);
+      await this.reservationService.finish(reservation);
+      res.redirect(`${this.ROUTE_BASE}/manage`);
+    } catch (e) {
+      res.render(`${this.RESERVATION_VIEWS}/error.njk`, { error: e.message})
     }
-    const { reservation } = await this.reservationService.getById(reservationId);
-    await this.reservationService.finish(reservation);
-    res.redirect(`${this.ROUTE_BASE}/manage`);
+    
   }
 
   async unblock(req, res) {
-    const { reservationId } = req.params;
-    if(!Number(reservationId)) {
-      throw new reservationIdUndefined("Reservation ID does not exist");
+    try {
+      const { reservationId } = req.params;
+      if(!Number(reservationId)) {
+        throw new reservationIdUndefined("Reservation ID does not exist");
+      }
+      const { reservation } = await this.reservationService.getById(reservationId);
+      await this.reservationService.unblock(reservation);
+      res.redirect(`${this.ROUTE_BASE}/manage`);
+    } catch (e) {
+      res.render(`${this.RESERVATION_VIEWS}/error.njk`, { error: e.message})
     }
-    const { reservation } = await this.reservationService.getById(reservationId);
-    await this.reservationService.unblock(reservation);
-    res.redirect(`${this.ROUTE_BASE}/manage`);
   }
 
   async pay(req, res) {
-    const { reservationId } = req.params;
-    if(!Number(reservationId)) {
-      throw new reservationIdUndefined("Reservation ID does not exist");
+    try {
+      const { reservationId } = req.params;
+      if(!Number(reservationId)) {
+        throw new reservationIdUndefined("Reservation ID does not exist");
+      }
+      const { reservation } = await this.reservationService.getById(reservationId);
+      await this.reservationService.pay(reservation);
+      res.redirect(`${this.ROUTE_BASE}/manage`);
+    } catch(e) {
+      res.render(`${this.RESERVATION_VIEWS}/error.njk`, { error: e.message})
     }
-    const { reservation } = await this.reservationService.getById(reservationId);
-    await this.reservationService.pay(reservation);
-    res.redirect(`${this.ROUTE_BASE}/manage`);
   }
 }

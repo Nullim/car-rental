@@ -41,7 +41,7 @@ module.exports = class CarService {
   */
   async getById(carId) {
     if(!Number(carId)) {
-      throw new carIdUndefined
+      throw new carIdUndefined()
     }
     return this.carsRepository.getById(carId);
   }

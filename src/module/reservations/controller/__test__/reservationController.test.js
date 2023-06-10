@@ -2,7 +2,6 @@ const ReservationController = require('../reservationController');
 const testReservationCreator = require('./reservations.fixture');
 const testCarCreator = require('../../../car/repository/__test__/cars.fixture');
 const testUserCreator = require('../../../user/controller/__test__/user.fixture');
-const reservationIdUndefined = require('../../error/reservationIdUndefined');
 
 const mockReservationService = {
   save: jest.fn(),
@@ -20,7 +19,7 @@ const mockReservationService = {
 }
 
 const mockCarService = {
-  getAll: jest.fn(),
+  getAll: jest.fn(() => [testCarCreator(1)]),
   getById: jest.fn(() => {
     return {
       car: undefined
@@ -29,7 +28,7 @@ const mockCarService = {
 }
 
 const mockUserService = {
-  getAll: jest.fn()
+  getAll: jest.fn(() => [testUserCreator(1)])
 }
 
 const reqMock = {
@@ -167,7 +166,10 @@ describe('ReservationController testing', () => {
     const reqMockEmpty = {
       params: {},
     }
-    await expect(() => mockController.finish(reqMockEmpty, resMock)).rejects.toThrowError(reservationIdUndefined);
+
+    mockReservationService.finish.mockRejectedValue()
+    await mockController.finish(reqMockEmpty, resMock)
+    expect(resMock.render).toHaveBeenCalledWith('reservations/views/error.njk', { error: 'Reservation ID does not exist' })
   })
 
   test('mark reservation as unblocked', async() => {
@@ -181,7 +183,10 @@ describe('ReservationController testing', () => {
     const reqMockEmpty = {
       params: {},
     }
-    await expect(() => mockController.unblock(reqMockEmpty, resMock)).rejects.toThrowError(reservationIdUndefined);
+
+    mockReservationService.unblock.mockRejectedValue()
+    await mockController.unblock(reqMockEmpty, resMock)
+    expect(resMock.render).toHaveBeenCalledWith('reservations/views/error.njk', { error: 'Reservation ID does not exist' })
   })
 
   test('mark reservation as paid', async() => {
@@ -195,6 +200,9 @@ describe('ReservationController testing', () => {
     const reqMockEmpty = {
       params: {},
     }
-    await expect(() => mockController.pay(reqMockEmpty, resMock)).rejects.toThrowError(reservationIdUndefined);
+
+    mockReservationService.pay.mockRejectedValue()
+    await mockController.pay(reqMockEmpty, resMock)
+    expect(resMock.render).toHaveBeenCalledWith('reservations/views/error.njk', { error: 'Reservation ID does not exist' })
   })
 })
